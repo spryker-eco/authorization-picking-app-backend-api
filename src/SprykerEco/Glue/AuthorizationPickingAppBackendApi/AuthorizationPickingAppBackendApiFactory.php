@@ -8,6 +8,7 @@
 namespace SprykerEco\Glue\AuthorizationPickingAppBackendApi;
 
 use Spryker\Glue\Kernel\Backend\AbstractBackendApiFactory;
+use Spryker\Glue\OauthBackendApi\Dependency\Facade\OauthBackendApiToOauthFacadeInterface;
 
 /**
  * @method \SprykerEco\Glue\AuthorizationPickingAppBackendApi\AuthorizationPickingAppBackendApiConfig getConfig()
@@ -15,41 +16,10 @@ use Spryker\Glue\Kernel\Backend\AbstractBackendApiFactory;
 class AuthorizationPickingAppBackendApiFactory extends AbstractBackendApiFactory
 {
     /**
-     * @return void
+     * @return \SprykerEco\Glue\AuthorizationPickingAppBackendApi\Dependency\Facade\AuthorizationPickingAppBackendApiToAuthorizationPickingAppBackendApiFacadeInterface
      */
-    public function createAuthCodeProcessor(): void
+    public function getAuthorizationPickingAppBackendApiFacade(): OauthBackendApiToOauthFacadeInterface
     {
+        return $this->getProvidedDependency(AuthorizationPickingAppBackendApiDependencyProvider::FACADE_AUTHORIZATION_PICKING_APP_BACKEND_API);
     }
-
-//    /**
-//     * @return \Spryker\Glue\OauthBackendApi\Dependency\Facade\OauthBackendApiToAuthenticationFacadeInterface
-//     */
-//    public function getAuthenticationFacade(): OauthBackendApiToAuthenticationFacadeInterface
-//    {
-//        return $this->getProvidedDependency(OauthBackendApiDependencyProvider::FACADE_AUTHENTICATION);
-//    }
-//
-//    /**
-//     * @return \Spryker\Glue\OauthBackendApi\Dependency\Service\OauthBackendApiToOauthServiceInterface
-//     */
-//    public function getOauthService(): OauthBackendApiToOauthServiceInterface
-//    {
-//        return $this->getProvidedDependency(OauthBackendApiDependencyProvider::SERVICE_OAUTH);
-//    }
-//
-//    /**
-//     * @return \Spryker\Glue\OauthBackendApi\Dependency\Service\OauthBackendApiToUtilEncodingServiceInterface
-//     */
-//    public function getUtilEncodingService(): OauthBackendApiToUtilEncodingServiceInterface
-//    {
-//        return $this->getProvidedDependency(OauthBackendApiDependencyProvider::SERVICE_UTIL_ENCODING);
-//    }
-//
-//    /**
-//     * @return \Spryker\Glue\OauthBackendApi\Dependency\Facade\OauthBackendApiToOauthFacadeInterface
-//     */
-//    public function getOauthFacade(): OauthBackendApiToOauthFacadeInterface
-//    {
-//        return $this->getProvidedDependency(OauthBackendApiDependencyProvider::FACADE_OAUTH);
-//    }
 }

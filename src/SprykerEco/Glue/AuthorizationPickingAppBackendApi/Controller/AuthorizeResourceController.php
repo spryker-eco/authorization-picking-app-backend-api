@@ -47,8 +47,7 @@ class AuthorizeResourceController extends AbstractBackendApiController
             ->fromArray($authCodeAttributesTransfer->toArray(), true)
             ->setGlueAuthenticationRequestContext($glueAuthenticationRequestContextTransfer);
 
-        //TODO call facade
-//        $oauthResponseTransfer = $this->getFactory()->createAuthCodeProcessor()->authorize($oauthRequestTransfer);
+        $oauthResponseTransfer = $this->getFactory()->getAuthorizationPickingAppBackendApiFacade()->authorize($oauthRequestTransfer);
 
         return $this->mapAuthenticationAttributesToGlueResponseTransfer($oauthResponseTransfer, $glueRequestTransfer);
     }
