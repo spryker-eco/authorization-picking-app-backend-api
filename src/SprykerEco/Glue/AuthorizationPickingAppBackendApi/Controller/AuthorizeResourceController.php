@@ -9,7 +9,6 @@ namespace SprykerEco\Glue\AuthorizationPickingAppBackendApi\Controller;
 
 use Generated\Shared\Transfer\AuthCodeAttributesTransfer;
 use Generated\Shared\Transfer\AuthCodeResponseAttributesTransfer;
-use Generated\Shared\Transfer\GlueAuthenticationRequestContextTransfer;
 use Generated\Shared\Transfer\GlueErrorTransfer;
 use Generated\Shared\Transfer\GlueRequestTransfer;
 use Generated\Shared\Transfer\GlueResourceTransfer;
@@ -26,11 +25,6 @@ use Symfony\Component\HttpFoundation\Response;
 class AuthorizeResourceController extends AbstractBackendApiController
 {
     /**
-     * @var string
-     */
-    protected const GLUE_BACKEND_API_APPLICATION = 'GLUE_BACKEND_API_APPLICATION';
-
-    /**
      * @param \Generated\Shared\Transfer\AuthCodeAttributesTransfer $authCodeAttributesTransfer
      * @param \Generated\Shared\Transfer\GlueRequestTransfer $glueRequestTransfer
      *
@@ -40,27 +34,21 @@ class AuthorizeResourceController extends AbstractBackendApiController
         AuthCodeAttributesTransfer $authCodeAttributesTransfer,
         GlueRequestTransfer $glueRequestTransfer
     ): GlueResponseTransfer {
-        $glueAuthenticationRequestContextTransfer = (new GlueAuthenticationRequestContextTransfer())
-            ->setRequestApplication(static::GLUE_BACKEND_API_APPLICATION);
-
         $oauthRequestTransfer = (new OauthRequestTransfer())
-            ->fromArray($authCodeAttributesTransfer->toArray(), true)
-            ->setGlueAuthenticationRequestContext($glueAuthenticationRequestContextTransfer);
+            ->fromArray($authCodeAttributesTransfer->toArray(), true);
 
         $oauthResponseTransfer = $this->getFactory()->getAuthorizationPickingAppBackendApiFacade()->authorize($oauthRequestTransfer);
 
-        return $this->mapAuthenticationAttributesToGlueResponseTransfer($oauthResponseTransfer, $glueRequestTransfer);
+        return $this->mapAuthenticationAttributesToGlueResponseTransfer($oauthResponseTransfer);
     }
 
     /**
      * @param \Generated\Shared\Transfer\OauthResponseTransfer $oauthResponseTransfer
-     * @param \Generated\Shared\Transfer\GlueRequestTransfer $glueRequestTransfer
      *
      * @return \Generated\Shared\Transfer\GlueResponseTransfer
      */
     protected function mapAuthenticationAttributesToGlueResponseTransfer(
-        OauthResponseTransfer $oauthResponseTransfer,
-        GlueRequestTransfer $glueRequestTransfer
+        OauthResponseTransfer $oauthResponseTransfer
     ): GlueResponseTransfer {
         $glueResponseTransfer = new GlueResponseTransfer();
 

@@ -87,23 +87,11 @@ class AuthorizationRequestProcessor implements AuthorizationRequestProcessorInte
      */
     protected function createAuthorizationRequest(OauthRequestTransfer $oauthRequestTransfer): ServerRequest
     {
-        $accessTokenRequest = new ServerRequest('POST', '');
+        $authorizeRequest = new ServerRequest('POST', '');
         $oauthRequestArray = $oauthRequestTransfer->toArray();
+        $authorizeRequest = $authorizeRequest->withQueryParams($oauthRequestArray);
 
-        if (
-            $oauthRequestTransfer->getGlueAuthenticationRequestContext() &&
-            $oauthRequestTransfer->getGlueAuthenticationRequestContext()->getRequestApplication()
-        ) {
-            $oauthRequestArray = array_merge(
-                ['request_application' => $oauthRequestTransfer->getGlueAuthenticationRequestContext()->getRequestApplication()],
-                $oauthRequestArray,
-            );
-        }
-
-        $accessTokenRequest = $accessTokenRequest->withQueryParams($oauthRequestArray);
-
-        return $accessTokenRequest;
-//        return $accessTokenRequest->withParsedBody($oauthRequestArray);
+        return $authorizeRequest;
     }
 
     /**
