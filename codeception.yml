@@ -22,3 +22,5 @@ coverage:
         include:
             - 'src/*'
 
+bootstrap: bootstrap.php
+
