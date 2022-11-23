@@ -38,11 +38,4 @@ interface AuthorizationPickingAppBackendApiRepositoryInterface
      * @return \Generated\Shared\Transfer\AuthCodeTransfer|null
      */
     public function findAuthCode(ClientEntityInterface $client, array $scopes = []): ?AuthCodeTransfer;
-
-    /**
-     * @param string $codeId
-     *
-     * @return \Generated\Shared\Transfer\AuthCodeTransfer|null
-     */
-    public function findAuthCodeByCodeId(string $codeId): ?AuthCodeTransfer;
 }

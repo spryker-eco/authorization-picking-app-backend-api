@@ -7,13 +7,16 @@
 
 namespace SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Processor;
 
+use Generated\Shared\Transfer\OauthErrorTransfer;
 use Generated\Shared\Transfer\OauthRequestTransfer;
 use Generated\Shared\Transfer\OauthResponseTransfer;
+use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\ServerRequest;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\Grant\GrantTypeInterface;
 use League\OAuth2\Server\RequestTypes\AuthorizationRequest;
 use Psr\Http\Message\ResponseInterface;
+use SprykerEco\Zed\AuthorizationPickingAppBackendApi\AuthorizationPickingAppBackendApiConfig;
 use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Validator\UserValidatorInterface;
 
 class AuthorizationRequestProcessor implements AuthorizationRequestProcessorInterface
@@ -29,15 +32,23 @@ class AuthorizationRequestProcessor implements AuthorizationRequestProcessorInte
     protected UserValidatorInterface $userValidator;
 
     /**
+     * @var \SprykerEco\Zed\AuthorizationPickingAppBackendApi\AuthorizationPickingAppBackendApiConfig
+     */
+    protected AuthorizationPickingAppBackendApiConfig $config;
+
+    /**
      * @param \League\OAuth2\Server\Grant\GrantTypeInterface $grantType
      * @param \SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Validator\UserValidatorInterface $userValidator
+     * @param \SprykerEco\Zed\AuthorizationPickingAppBackendApi\AuthorizationPickingAppBackendApiConfig $config
      */
     public function __construct(
         GrantTypeInterface $grantType,
-        UserValidatorInterface $userValidator
+        UserValidatorInterface $userValidator,
+        AuthorizationPickingAppBackendApiConfig $config
     ) {
         $this->grantType = $grantType;
         $this->userValidator = $userValidator;
+        $this->config = $config;
     }
 
     /**
@@ -48,12 +59,13 @@ class AuthorizationRequestProcessor implements AuthorizationRequestProcessorInte
     public function authorize(OauthRequestTransfer $oauthRequestTransfer): OauthResponseTransfer
     {
         try {
-            //expand with client data
             $authorizationRequest = $this->createAuthorizationRequest($oauthRequestTransfer);
 
             $authRequest = $this->grantType->validateAuthorizationRequest($authorizationRequest);
             $authRequest = $this->validateUser($oauthRequestTransfer, $authRequest);
-            $authorizationResponse = $this->grantType->completeAuthorizationRequest($authRequest);
+            $authorizationResponse = $this->grantType
+                ->completeAuthorizationRequest($authRequest)
+                ->generateHttpResponse(new Response());
 
             return $this->createOauthResponseTransfer($authorizationResponse);
         } catch (OAuthServerException $exception) {
@@ -121,6 +133,23 @@ class AuthorizationRequestProcessor implements AuthorizationRequestProcessorInte
         }
 
         return $data;
+    }
+
+    /**
+     * @param \League\OAuth2\Server\Exception\OAuthServerException $exception
+     *
+     * @return \Generated\Shared\Transfer\OauthResponseTransfer
+     */
+    protected function createErrorOauthResponseTransfer(OAuthServerException $exception): OauthResponseTransfer
+    {
+        $oauthErrorTransfer = new OauthErrorTransfer();
+        $oauthErrorTransfer
+            ->setErrorType($exception->getErrorType())
+            ->setMessage($exception->getMessage());
+
+        return (new OauthResponseTransfer())
+            ->setIsValid(false)
+            ->setError($oauthErrorTransfer);
     }
 
     /**

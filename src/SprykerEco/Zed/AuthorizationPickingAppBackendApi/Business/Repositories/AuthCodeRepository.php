@@ -11,11 +11,12 @@ use Generated\Shared\Transfer\AuthCodeTransfer;
 use Generated\Shared\Transfer\SpyOauthAuthCodeEntityTransfer;
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
+use LogicException;
 use Spryker\Zed\Oauth\Business\Model\League\Entities\AuthCodeEntity;
+use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Dependency\Service\AuthorizationPickingAppBackendApiToUtilEncodingServiceInterface;
 use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Persistence\AuthorizationPickingAppBackendApiEntityManagerInterface;
 use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Persistence\AuthorizationPickingAppBackendApiRepositoryInterface;
 
-//TODO CHANGE DEPENDENCIES
 class AuthCodeRepository implements AuthCodeRepositoryInterface
 {
     /**
@@ -29,21 +30,23 @@ class AuthCodeRepository implements AuthCodeRepositoryInterface
     protected AuthorizationPickingAppBackendApiEntityManagerInterface $authorizationEntityManager;
 
     /**
+     * @var \SprykerEco\Zed\AuthorizationPickingAppBackendApi\Dependency\Service\AuthorizationPickingAppBackendApiToUtilEncodingServiceInterface
+     */
+    protected AuthorizationPickingAppBackendApiToUtilEncodingServiceInterface $utilEncodingService;
+
+    /**
      * @param \SprykerEco\Zed\AuthorizationPickingAppBackendApi\Persistence\AuthorizationPickingAppBackendApiRepositoryInterface $authorizationRepository
      * @param \SprykerEco\Zed\AuthorizationPickingAppBackendApi\Persistence\AuthorizationPickingAppBackendApiEntityManagerInterface $authorizationEntityManager
-// * @param \Spryker\Zed\Oauth\Dependency\Service\OauthToUtilEncodingServiceInterface $utilEncodingService
-// * @param array<\Spryker\Zed\OauthExtension\Dependency\Plugin\OauthUserIdentifierFilterPluginInterface> $oauthUserIdentifierFilterPlugins
+     * @param \SprykerEco\Zed\AuthorizationPickingAppBackendApi\Dependency\Service\AuthorizationPickingAppBackendApiToUtilEncodingServiceInterface $utilEncodingService
      */
     public function __construct(
         AuthorizationPickingAppBackendApiRepositoryInterface $authorizationRepository,
         AuthorizationPickingAppBackendApiEntityManagerInterface $authorizationEntityManager,
-        //        OauthToUtilEncodingServiceInterface $utilEncodingService,
-        //        array $oauthUserIdentifierFilterPlugins = []
+        AuthorizationPickingAppBackendApiToUtilEncodingServiceInterface $utilEncodingService
     ) {
         $this->authorizationRepository = $authorizationRepository;
         $this->authorizationEntityManager = $authorizationEntityManager;
-//        $this->utilEncodingService = $utilEncodingService;
-//        $this->oauthUserIdentifierFilterPlugins = $oauthUserIdentifierFilterPlugins;
+        $this->utilEncodingService = $utilEncodingService;
     }
 
     /**
@@ -62,7 +65,6 @@ class AuthCodeRepository implements AuthCodeRepositoryInterface
     public function persistNewAuthCode(AuthCodeEntityInterface $authCodeEntity): void
     {
         $userIdentifier = (string)$authCodeEntity->getUserIdentifier();
-        $userIdentifier = $this->filterUserIdentifier($userIdentifier);
 
         /** @var string $encodedScopes */
         $encodedScopes = json_encode($authCodeEntity->getScopes());
@@ -76,28 +78,32 @@ class AuthCodeRepository implements AuthCodeRepositoryInterface
             ->setRedirectUri($authCodeEntity->getRedirectUri())
             ->setScopes($encodedScopes);
 
-        $this->authorizationEntityManager->saveAuthCode($authCodeEntityTransfer);
+        $this->authorizationEntityManager->saveCode($authCodeEntityTransfer);
     }
 
-//    /**
-//     * @param string $codeId
-//     *
-//     * @return void
-//     */
-//    public function revokeAuthCode($codeId): void
-//    {
-//        $this->authorizationEntityManager->deleteAuthCodeByIdentifier($codeId);
-//    }
-//
-//    /**
-//     * @param string $codeId
-//     *
-//     * @return bool
-//     */
-//    public function isAuthCodeRevoked($codeId): bool
-//    {
-//        return $this->oauthRepository->findAuthCodeByCodeId($codeId) === null;
-//    }
+    /**
+     * @param string $codeId
+     *
+     * @throws \LogicException
+     *
+     * @return void
+     */
+    public function revokeAuthCode(string $codeId): void
+    {
+        throw new LogicException('This grant does not use this method');
+    }
+
+    /**
+     * @param string $codeId
+     *
+     * @throws \LogicException
+     *
+     * @return bool
+     */
+    public function isAuthCodeRevoked(string $codeId): bool
+    {
+        throw new LogicException('This grant does not use this method');
+    }
 
     /**
      * @param \League\OAuth2\Server\Entities\ClientEntityInterface $client
@@ -108,23 +114,5 @@ class AuthCodeRepository implements AuthCodeRepositoryInterface
     public function findAuthCode(ClientEntityInterface $client, array $scopes = []): ?AuthCodeTransfer
     {
         return $this->authorizationRepository->findAuthCode($client, $scopes);
-    }
-
-    /**
-     * @param string $userIdentifier
-     *
-     * @return string
-     */
-    protected function filterUserIdentifier(string $userIdentifier): string
-    {
-        $decodedUserIdentifier = $this->utilEncodingService->decodeJson($userIdentifier, true);
-
-        if ($decodedUserIdentifier) {
-            foreach ($this->oauthUserIdentifierFilterPlugins as $oauthUserIdentifierFilterPlugin) {
-                $decodedUserIdentifier = $oauthUserIdentifierFilterPlugin->filter($decodedUserIdentifier);
-            }
-        }
-
-        return (string)$this->utilEncodingService->encodeJson($decodedUserIdentifier);
     }
 }

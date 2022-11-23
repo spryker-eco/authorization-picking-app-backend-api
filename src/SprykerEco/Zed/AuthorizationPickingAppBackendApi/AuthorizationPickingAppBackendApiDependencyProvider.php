@@ -9,6 +9,8 @@ namespace SprykerEco\Zed\AuthorizationPickingAppBackendApi;
 
 use Spryker\Zed\Kernel\AbstractBundleDependencyProvider;
 use Spryker\Zed\Kernel\Container;
+use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Dependency\External\AuthorizationPickingAppBackendApiToYamlAdapter;
+use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Dependency\Facade\AuthorizationPickingAppBackendApiToUserFacadeBridge;
 use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Dependency\Service\AuthorizationPickingAppBackendApiToUtilEncodingServiceBridge;
 
 /**
@@ -22,6 +24,16 @@ class AuthorizationPickingAppBackendApiDependencyProvider extends AbstractBundle
     public const SERVICE_UTIL_ENCODING = 'SERVICE_UTIL_ENCODING';
 
     /**
+     * @var string
+     */
+    public const ADAPTER_YAML = 'ADAPTER_YAML';
+
+    /**
+     * @var string
+     */
+    public const FACADE_USER = 'FACADE_USER';
+
+    /**
      * @param \Spryker\Zed\Kernel\Container $container
      *
      * @return \Spryker\Zed\Kernel\Container
@@ -30,11 +42,8 @@ class AuthorizationPickingAppBackendApiDependencyProvider extends AbstractBundle
     {
         $container = parent::provideBusinessLayerDependencies($container);
         $container = $this->addUtilEncodingService($container);
-
-//        $container = $this->addOauthUserProviderPlugins($container);
-//        $container = $this->addScopeProviderPlugins($container);
-//        $container = $this->addOauthUserIdentifierFilterPlugins($container);
-//        $container = $this->addScopeFinderPlugins($container);
+        $container = $this->addYamlAdapter($container);
+        $container = $this->addUserFacade($container);
 
         return $container;
     }
@@ -55,91 +64,31 @@ class AuthorizationPickingAppBackendApiDependencyProvider extends AbstractBundle
         return $container;
     }
 
-//    /**
-//     * @param \Spryker\Zed\Kernel\Container $container
-//     *
-//     * @return \Spryker\Zed\Kernel\Container
-//     */
-//    protected function addOauthUserProviderPlugins(Container $container): Container
-//    {
-//        $container->set(static::PLUGINS_OAUTH_USER_PROVIDER, function (Container $container) {
-//            return $this->getOauthUserProviderPlugins();
-//        });
-//
-//        return $container;
-//    }
-//
-//    /**
-//     * @param \Spryker\Zed\Kernel\Container $container
-//     *
-//     * @return \Spryker\Zed\Kernel\Container
-//     */
-//    protected function addScopeProviderPlugins(Container $container): Container
-//    {
-//        $container->set(static::PLUGIN_SCOPE_PROVIDER, function (Container $container) {
-//            return $this->getScopeProviderPlugins();
-//        });
-//
-//        return $container;
-//    }
-//
-//    /**
-//     * @param \Spryker\Zed\Kernel\Container $container
-//     *
-//     * @return \Spryker\Zed\Kernel\Container
-//     */
-//    protected function addScopeFinderPlugins(Container $container): Container
-//    {
-//        $container->set(static::PLUGINS_SCOPE_FINDER, function (Container $container) {
-//            return $this->getScopeFinderPlugins();
-//        });
-//
-//        return $container;
-//    }
-//
-//    /**
-//     * @param \Spryker\Zed\Kernel\Container $container
-//     *
-//     * @return \Spryker\Zed\Kernel\Container
-//     */
-//    protected function addOauthUserIdentifierFilterPlugins(Container $container): Container
-//    {
-//        $container->set(static::PLUGINS_OAUTH_USER_IDENTIFIER_FILTER, function () {
-//            return $this->getOauthUserIdentifierFilterPlugins();
-//        });
-//
-//        return $container;
-//    }
-//
-//    /**
-//     * @return array<\Spryker\Zed\OauthExtension\Dependency\Plugin\OauthUserProviderPluginInterface>
-//     */
-//    protected function getUserProviderPlugins(): array
-//    {
-//        return [];
-//    }
-//
-//    /**
-//     * @return array<\Spryker\Zed\OauthExtension\Dependency\Plugin\OauthUserProviderPluginInterface>
-//     */
-//    protected function getOauthUserProviderPlugins(): array
-//    {
-//        return [];
-//    }
-//
-//    /**
-//     * @return array<\Spryker\Zed\OauthExtension\Dependency\Plugin\OauthScopeProviderPluginInterface>
-//     */
-//    protected function getScopeProviderPlugins(): array
-//    {
-//        return [];
-//    }
-//
-//    /**
-//     * @return array<\Spryker\Glue\OauthExtension\Dependency\Plugin\ScopeFinderPluginInterface>
-//     */
-//    protected function getScopeFinderPlugins(): array
-//    {
-//        return [];
-//    }
+    /**
+     * @param \Spryker\Zed\Kernel\Container $container
+     *
+     * @return \Spryker\Zed\Kernel\Container
+     */
+    protected function addYamlAdapter(Container $container): Container
+    {
+        $container->set(static::ADAPTER_YAML, function () {
+            return new AuthorizationPickingAppBackendApiToYamlAdapter();
+        });
+
+        return $container;
+    }
+
+    /**
+     * @param \Spryker\Zed\Kernel\Container $container
+     *
+     * @return \Spryker\Zed\Kernel\Container
+     */
+    protected function addUserFacade(Container $container): Container
+    {
+        $container->set(static::FACADE_USER, function (Container $container) {
+            return new AuthorizationPickingAppBackendApiToUserFacadeBridge($container->getLocator()->user()->facade());
+        });
+
+        return $container;
+    }
 }

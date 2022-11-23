@@ -8,21 +8,29 @@
 namespace SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business;
 
 use League\OAuth2\Server\Grant\GrantTypeInterface;
-use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 use League\OAuth2\Server\Repositories\ScopeRepositoryInterface;
 use League\OAuth2\Server\Repositories\UserRepositoryInterface;
 use Spryker\Zed\Kernel\Business\AbstractBusinessFactory;
 use SprykerEco\Zed\AuthorizationPickingAppBackendApi\AuthorizationPickingAppBackendApiDependencyProvider;
+use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Finders\ScopeFinder;
+use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Finders\ScopeFinderInterface;
 use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Grant\AuthCodeGrantType;
 use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Processor\AuthorizationRequestProcessor;
 use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Processor\AuthorizationRequestProcessorInterface;
+use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Providers\ScopeProvider;
+use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Providers\ScopeProviderInterface;
+use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Providers\UserProvider;
+use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Providers\UserProviderInterface;
 use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Repositories\AuthCodeRepository;
+use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Repositories\AuthCodeRepositoryInterface;
 use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Repositories\ClientRepository;
 use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Repositories\ScopeRepository;
 use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Repositories\UserRepository;
 use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Validator\UserValidator;
 use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Validator\UserValidatorInterface;
+use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Dependency\External\AuthorizationPickingAppBackendApiToYamlAdapterInterface;
+use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Dependency\Facade\AuthorizationPickingAppBackendApiToUserFacadeInterface;
 use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Dependency\Service\AuthorizationPickingAppBackendApiToUtilEncodingServiceInterface;
 
 /**
@@ -51,7 +59,6 @@ class AuthorizationPickingAppBackendApiBusinessFactory extends AbstractBusinessF
         $authCodeGrantType = new AuthCodeGrantType(
             $this->getConfig(),
             $this->createAuthCodeRepository(),
-            //TODO ADD REFRESH TOKEN REPOSITORY
         );
 
         $authCodeGrantType->setClientRepository($this->createClientRepository());
@@ -71,7 +78,7 @@ class AuthorizationPickingAppBackendApiBusinessFactory extends AbstractBusinessF
     }
 
     /**
-     * @return \League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface
+     * @return \SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Repositories\AuthCodeRepositoryInterface
      */
     public function createAuthCodeRepository(): AuthCodeRepositoryInterface
     {
@@ -79,7 +86,6 @@ class AuthorizationPickingAppBackendApiBusinessFactory extends AbstractBusinessF
             $this->getRepository(),
             $this->getEntityManager(),
             $this->getUtilEncodingService(),
-            //            $this->oauthUserIdentifierFilterPlugins,
         );
     }
 
@@ -100,8 +106,8 @@ class AuthorizationPickingAppBackendApiBusinessFactory extends AbstractBusinessF
     {
         return new ScopeRepository(
             $this->getRepository(),
-            //TODO add scope provider plugins
-            //TODO add scope finder plugins
+            $this->createScopeProvider(),
+            $this->createScopeFinder(),
         );
     }
 
@@ -111,8 +117,27 @@ class AuthorizationPickingAppBackendApiBusinessFactory extends AbstractBusinessF
     public function createUserRepository(): UserRepositoryInterface
     {
         return new UserRepository(
-            //TODO add user provider plugins
+            $this->createUserProvider(),
         );
+    }
+
+    /**
+     * @return \SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Providers\UserProviderInterface
+     */
+    public function createUserProvider(): UserProviderInterface
+    {
+        return new UserProvider(
+            $this->getUserFacade(),
+            $this->getUtilEncodingService(),
+        );
+    }
+
+    /**
+     * @return \SprykerEco\Zed\AuthorizationPickingAppBackendApi\Dependency\Facade\AuthorizationPickingAppBackendApiToUserFacadeInterface
+     */
+    public function getUserFacade(): AuthorizationPickingAppBackendApiToUserFacadeInterface
+    {
+        return $this->getProvidedDependency(AuthorizationPickingAppBackendApiDependencyProvider::FACADE_USER);
     }
 
     /**
@@ -121,5 +146,34 @@ class AuthorizationPickingAppBackendApiBusinessFactory extends AbstractBusinessF
     public function getUtilEncodingService(): AuthorizationPickingAppBackendApiToUtilEncodingServiceInterface
     {
         return $this->getProvidedDependency(AuthorizationPickingAppBackendApiDependencyProvider::SERVICE_UTIL_ENCODING);
+    }
+
+    /**
+     * @return \SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Providers\ScopeProviderInterface
+     */
+    public function createScopeProvider(): ScopeProviderInterface
+    {
+        return new ScopeProvider(
+            $this->getConfig(),
+        );
+    }
+
+    /**
+     * @return \SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Finders\ScopeFinderInterface
+     */
+    public function createScopeFinder(): ScopeFinderInterface
+    {
+        return new ScopeFinder(
+            $this->getConfig(),
+            $this->getYamlAdapter(),
+        );
+    }
+
+    /**
+     * @return \SprykerEco\Zed\AuthorizationPickingAppBackendApi\Dependency\External\AuthorizationPickingAppBackendApiToYamlAdapterInterface
+     */
+    public function getYamlAdapter(): AuthorizationPickingAppBackendApiToYamlAdapterInterface
+    {
+        return $this->getProvidedDependency(AuthorizationPickingAppBackendApiDependencyProvider::ADAPTER_YAML);
     }
 }

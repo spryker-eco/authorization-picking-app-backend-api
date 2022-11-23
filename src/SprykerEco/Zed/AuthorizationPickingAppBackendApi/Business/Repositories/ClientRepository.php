@@ -38,7 +38,7 @@ class ClientRepository implements ClientRepositoryInterface
      *
      * @return \League\OAuth2\Server\Entities\ClientEntityInterface|null
      */
-    public function getClientEntity(string $clientIdentifier): ?ClientEntityInterface
+    public function getClientEntity($clientIdentifier): ?ClientEntityInterface
     {
         $oauthClientEntityTransfer = $this->findClientEntityTransfer($clientIdentifier);
 
@@ -61,18 +61,11 @@ class ClientRepository implements ClientRepositoryInterface
      *
      * @return bool
      */
-    public function validateClient(string $clientIdentifier, ?string $clientSecret, ?string $grantType): bool
+    public function validateClient($clientIdentifier, $clientSecret, $grantType): bool
     {
         $oauthClientEntityTransfer = $this->findClientEntityTransfer($clientIdentifier);
 
         if (!$oauthClientEntityTransfer) {
-            return false;
-        }
-
-        if (
-            $oauthClientEntityTransfer->getIsConfidential() === true
-            && password_verify($clientSecret, $oauthClientEntityTransfer->getSecret()) === false
-        ) {
             return false;
         }
 

@@ -13,6 +13,8 @@ use Generated\Shared\Transfer\OauthScopeTransfer;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\ScopeEntityInterface;
 use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Entities\ScopeEntity;
+use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Finders\ScopeFinderInterface;
+use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Providers\ScopeProviderInterface;
 use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Persistence\AuthorizationPickingAppBackendApiRepositoryInterface;
 
 class ScopeRepository implements ScopeRepositoryInterface
@@ -23,28 +25,28 @@ class ScopeRepository implements ScopeRepositoryInterface
     protected AuthorizationPickingAppBackendApiRepositoryInterface $authorizationRepository;
 
     /**
-     * @var array<\Spryker\Zed\OauthExtension\Dependency\Plugin\OauthScopeProviderPluginInterface>
+     * @var \SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Providers\ScopeProviderInterface
      */
-    protected $scopeProviderPlugins;
+    protected ScopeProviderInterface $scopeProvider;
 
     /**
-     * @var array<\Spryker\Glue\OauthExtension\Dependency\Plugin\ScopeFinderPluginInterface>
+     * @var \SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Finders\ScopeFinderInterface
      */
-    protected $scopeFinderPlugins;
+    protected ScopeFinderInterface $scopeFinder;
 
     /**
      * @param \SprykerEco\Zed\AuthorizationPickingAppBackendApi\Persistence\AuthorizationPickingAppBackendApiRepositoryInterface $authorizationRepository
-     * @param array<\Spryker\Zed\OauthExtension\Dependency\Plugin\OauthScopeProviderPluginInterface> $scopeProviderPlugins
-     * @param array<\Spryker\Glue\OauthExtension\Dependency\Plugin\ScopeFinderPluginInterface> $scopeFinderPlugins
+     * @param \SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Providers\ScopeProviderInterface $scopeProvider
+     * @param \SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Finders\ScopeFinderInterface $scopeFinder
      */
     public function __construct(
         AuthorizationPickingAppBackendApiRepositoryInterface $authorizationRepository,
-        array $scopeProviderPlugins = [],
-        array $scopeFinderPlugins = []
+        ScopeProviderInterface $scopeProvider,
+        ScopeFinderInterface $scopeFinder
     ) {
         $this->authorizationRepository = $authorizationRepository;
-        $this->scopeProviderPlugins = $scopeProviderPlugins;
-        $this->scopeFinderPlugins = $scopeFinderPlugins;
+        $this->scopeProvider = $scopeProvider;
+        $this->scopeFinder = $scopeFinder;
     }
 
     /**
@@ -57,12 +59,10 @@ class ScopeRepository implements ScopeRepositoryInterface
      */
     public function getScopeEntityByIdentifier(string $identifier, ?string $applicationName = null): ?ScopeEntityInterface
     {
-        foreach ($this->scopeFinderPlugins as $scopeFinderPlugin) {
-            $oauthScopeFindTransfer = (new OauthScopeFindTransfer())->setIdentifier($identifier)->setApplicationName($applicationName);
+        $oauthScopeFindTransfer = (new OauthScopeFindTransfer())->setIdentifier($identifier)->setApplicationName($applicationName);
 
-            if ($scopeFinderPlugin->isServing($oauthScopeFindTransfer) && $scopeFinderPlugin->findScope($oauthScopeFindTransfer)) {
-                return $this->createScopeEntity($identifier);
-            }
+        if ($this->scopeFinder->find($oauthScopeFindTransfer)) {
+            return $this->createScopeEntity($identifier);
         }
 
         $scopeEntityTransfer = $this->authorizationRepository->findScopeByIdentifier($identifier);
@@ -93,7 +93,7 @@ class ScopeRepository implements ScopeRepositoryInterface
         ?string $applicationName = null
     ): array {
         $oauthScopeRequestTransfer = $this->mapOauthScopeRequestTransfer($scopes, $grantType, $clientEntity, $userIdentifier, $applicationName);
-        $providedScopes = $this->getProvidedScopes($oauthScopeRequestTransfer);
+        $providedScopes = $this->scopeProvider->provide($oauthScopeRequestTransfer);
 
         return $this->mapScopeEntities($providedScopes);
     }
@@ -134,25 +134,6 @@ class ScopeRepository implements ScopeRepositoryInterface
     }
 
     /**
-     * @param \Generated\Shared\Transfer\OauthScopeRequestTransfer $oauthScopeRequestTransfer
-     *
-     * @return array<\Generated\Shared\Transfer\OauthScopeTransfer>
-     */
-    protected function getProvidedScopes(OauthScopeRequestTransfer $oauthScopeRequestTransfer): array
-    {
-        $providedScopes = [];
-        foreach ($this->scopeProviderPlugins as $scopeProviderPlugin) {
-            if (!$scopeProviderPlugin->accept($oauthScopeRequestTransfer)) {
-                continue;
-            }
-
-            $providedScopes[] = $scopeProviderPlugin->getScopes($oauthScopeRequestTransfer);
-        }
-
-        return $providedScopes ? array_merge(...$providedScopes) : [];
-    }
-
-    /**
      * @param array<\Generated\Shared\Transfer\OauthScopeTransfer> $providedScopes
      *
      * @return array
@@ -176,6 +157,9 @@ class ScopeRepository implements ScopeRepositoryInterface
      */
     protected function createScopeEntity(string $scopeIdentifier): ScopeEntity
     {
-        return (new ScopeEntity())->setIdentifier($scopeIdentifier);
+        $scopeEntity = new ScopeEntity();
+        $scopeEntity->setIdentifier($scopeIdentifier);
+
+        return $scopeEntity;
     }
 }

@@ -36,6 +36,11 @@ class AuthCodeGrantType extends AuthCodeGrant implements GrantTypeInterface
     /**
      * @var string
      */
+    protected const REQUEST_PARAMETER_RESPONSE_TYPE = 'response_type';
+
+    /**
+     * @var string
+     */
     protected const REQUEST_PARAMETER_CODE = 'code';
 
     /**
@@ -104,16 +109,14 @@ class AuthCodeGrantType extends AuthCodeGrant implements GrantTypeInterface
      */
     public function __construct(
         AuthorizationPickingAppBackendApiConfig $config,
-        AuthCodeRepositoryInterface $authCodeRepository,
-        //        RefreshTokenRepositoryInterface $refreshTokenRepository
+        AuthCodeRepositoryInterface $authCodeRepository
     ) {
         $this->authCodeTTL = new DateInterval($config->getAuthCodeTTL());
+        $this->setAuthCodeRepository($authCodeRepository);
 
-        parent::__construct(
-            $authCodeRepository,
-            $refreshTokenRepository,
-            $this->authCodeTTL,
-        );
+        if ($config->isCodeChallengeRequired() === false) {
+            $this->disableRequireCodeChallengeForPublicClients();
+        }
 
         if (in_array('sha256', hash_algos(), true)) {
             $s256Verifier = new S256Verifier();
@@ -133,6 +136,10 @@ class AuthCodeGrantType extends AuthCodeGrant implements GrantTypeInterface
      */
     public function validateAuthorizationRequest(ServerRequestInterface $request): AuthorizationRequest
     {
+        if (!$this->canRespondToAuthorizationRequest($request)) {
+            throw OAuthServerException::invalidRequest(static::REQUEST_PARAMETER_RESPONSE_TYPE, 'Authorization request malformed.');
+        }
+
         $clientId = $this->getQueryStringParameter(
             static::REQUEST_PARAMETER_CLIENT_ID,
             $request,
@@ -161,9 +168,6 @@ class AuthCodeGrantType extends AuthCodeGrant implements GrantTypeInterface
             throw OAuthServerException::invalidClient($request);
         }
 
-//        //validate user
-//        $userEntity = $this->validateUser($request, $clientEntity);
-
         //validate scopes
         $this->applicationContext = $this->getRequestParameter(static::REQUEST_PARAMETER_APPLICATION_NAME, $request);
         $scopes = $this->validateScopes(
@@ -178,8 +182,6 @@ class AuthCodeGrantType extends AuthCodeGrant implements GrantTypeInterface
         $authorizationRequest->setGrantTypeId($this->getIdentifier());
         $authorizationRequest->setClient($clientEntity);
         $authorizationRequest->setRedirectUri($redirectUri);
-//        $authorizationRequest->setUser($userEntity);
-//        $authorizationRequest->setAuthorizationApproved($userEntity !== null);
         $authorizationRequest->setScopes($scopes);
 
         if ($stateParameter !== null) {
@@ -223,7 +225,8 @@ class AuthCodeGrantType extends AuthCodeGrant implements GrantTypeInterface
                 $authorizationRequest->getClient(),
                 $authorizationRequest->getUser()->getIdentifier(),
                 $authorizationRequest->getRedirectUri(),
-                $authorizationRequest->getScopes(),
+                $scopes,
+                //                $authorizationRequest->getScopes(),
             );
 
             $payload = [
@@ -314,8 +317,8 @@ class AuthCodeGrantType extends AuthCodeGrant implements GrantTypeInterface
     protected function issueAuthCode(
         DateInterval $authCodeTTL,
         ClientEntityInterface $client,
-        string $userIdentifier,
-        ?string $redirectUri,
+        $userIdentifier,
+        $redirectUri,
         array $scopes = []
     ): AuthCodeEntityInterface {
         $authCodeTransfer = $this->authCodeRepository->findAuthCode($client, $scopes);

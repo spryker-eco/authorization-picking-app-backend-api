@@ -60,6 +60,7 @@ class AuthorizationPickingAppBackendApiRepository extends AbstractRepository imp
         foreach ($scopes as $scope) {
             $scopeIdentifiers[] = $scope->getIdentifier();
         }
+        //TODO add scope filtering
         $scopes = sprintf('["%s"]', implode('", "', $scopeIdentifiers));
 
         $authCodeEntity = $this->getFactory()
@@ -67,25 +68,6 @@ class AuthorizationPickingAppBackendApiRepository extends AbstractRepository imp
             ->filterByFkOauthClient($client->getIdentifier())
             ->filterByExpirityDate(['min' => new DateTimeImmutable('now')], Criteria::GREATER_EQUAL)
             ->orderByIdOauthAuthCode(Criteria::DESC)
-            ->findOne();
-
-        if ($authCodeEntity === null) {
-            return null;
-        }
-
-        return $this->getFactory()->createAuthCodeMapper()->mapAuthCodeEntityToAuthCodeTransfer($authCodeEntity, new AuthCodeTransfer());
-    }
-
-    /**
-     * @param string $codeId
-     *
-     * @return \Generated\Shared\Transfer\AuthCodeTransfer|null
-     */
-    public function findAuthCodeByCodeId(string $codeId): ?AuthCodeTransfer
-    {
-        $authCodeEntity = $this->getFactory()
-            ->createAuthCodeQuery()
-            ->filterByIdentifier($codeId)
             ->findOne();
 
         if ($authCodeEntity === null) {

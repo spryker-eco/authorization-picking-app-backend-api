@@ -20,8 +20,6 @@ interface AuthorizationPickingAppBackendApiFacadeInterface
      * - Requires `OauthRequestTransfer.password` to be provided.
      * - Requires `OauthRequestTransfer.clientId` to be provided.
      * - Requires `OauthRequestTransfer.codeChallenge`, `OauthRequestTransfer.codeChallengeMethod` to be provided for PKCE checks. (Configurable)
-// * - Executes a stack of {@link \Spryker\Zed\OauthExtension\Dependency\Plugin\OauthScopeProviderPluginInterface} plugins.
-// * - Executes a stack of {@link \Spryker\Zed\OauthExtension\Dependency\Plugin\OauthRequestGrantTypeConfigurationProviderPluginInterface} plugins.
      * - Saves issued authorization code in database for auditing.
      * - Returns `OauthRequestTransfer` expanded with a new authorization code when the authorization request is valid.
      *

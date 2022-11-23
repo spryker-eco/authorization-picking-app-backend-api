@@ -12,20 +12,21 @@ use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\UserEntityInterface;
 use League\OAuth2\Server\Repositories\UserRepositoryInterface;
 use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Entities\UserEntity;
+use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Providers\UserProviderInterface;
 
 class UserRepository implements UserRepositoryInterface
 {
     /**
-     * @var array<\Spryker\Zed\OauthExtension\Dependency\Plugin\OauthUserProviderPluginInterface>
+     * @var \SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Providers\UserProviderInterface
      */
-    protected $userProviderPlugins;
+    protected UserProviderInterface $userProvider;
 
     /**
-     * @param array<\Spryker\Zed\OauthExtension\Dependency\Plugin\OauthUserProviderPluginInterface> $userProviderPlugins
+     * @param \SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Providers\UserProviderInterface $userProvider
      */
-    public function __construct(array $userProviderPlugins = [])
+    public function __construct(UserProviderInterface $userProvider)
     {
-        $this->userProviderPlugins = $userProviderPlugins;
+        $this->userProvider = $userProvider;
     }
 
     /**
@@ -59,15 +60,10 @@ class UserRepository implements UserRepositoryInterface
      */
     protected function findUser(OauthUserTransfer $oauthUserTransfer): ?OauthUserTransfer
     {
-        foreach ($this->userProviderPlugins as $userProviderPlugin) {
-            if (!$userProviderPlugin->accept($oauthUserTransfer)) {
-                continue;
-            }
+        $oauthUserTransfer = $this->userProvider->provide($oauthUserTransfer);
 
-            $oauthUserTransfer = $userProviderPlugin->getUser($oauthUserTransfer);
-            if ($oauthUserTransfer->getIsSuccess()) {
-                return $oauthUserTransfer;
-            }
+        if ($oauthUserTransfer->getIsSuccess()) {
+            return $oauthUserTransfer;
         }
 
         return null;

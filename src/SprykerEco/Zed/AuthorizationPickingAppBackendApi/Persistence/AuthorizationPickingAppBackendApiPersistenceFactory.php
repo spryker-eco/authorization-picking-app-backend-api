@@ -8,9 +8,10 @@
 namespace SprykerEco\Zed\AuthorizationPickingAppBackendApi\Persistence;
 
 use Orm\Zed\Oauth\Persistence\SpyOauthAuthCodeQuery;
+use Orm\Zed\Oauth\Persistence\SpyOauthClientQuery;
+use Orm\Zed\Oauth\Persistence\SpyOauthScopeQuery;
 use Spryker\Zed\Kernel\Persistence\AbstractPersistenceFactory;
-
-//use Spryker\Zed\Oauth\Persistence\Propel\Mapper\AuthCodeMapper;
+use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Persistence\Propel\Mapper\AuthCodeMapper;
 
 /**
  * @method \SprykerEco\Zed\AuthorizationPickingAppBackendApi\AuthorizationPickingAppBackendApiConfig getConfig()
@@ -27,11 +28,27 @@ class AuthorizationPickingAppBackendApiPersistenceFactory extends AbstractPersis
         return SpyOauthAuthCodeQuery::create();
     }
 
-//    /**
-//     * @return \Spryker\Zed\Oauth\Persistence\Propel\Mapper\AuthCodeMapper
-//     */
-//    public function createAuthCodeMapper(): AuthCodeMapper
-//    {
-//        return new AuthCodeMapper();
-//    }
+    /**
+     * @return \Orm\Zed\Oauth\Persistence\SpyOauthClientQuery
+     */
+    public function createOauthClientQuery(): SpyOauthClientQuery
+    {
+        return SpyOauthClientQuery::create();
+    }
+
+    /**
+     * @return \Orm\Zed\Oauth\Persistence\SpyOauthScopeQuery
+     */
+    public function createScopeQuery(): SpyOauthScopeQuery
+    {
+        return SpyOauthScopeQuery::create();
+    }
+
+    /**
+     * @return \SprykerEco\Zed\AuthorizationPickingAppBackendApi\Persistence\Propel\Mapper\AuthCodeMapper
+     */
+    public function createAuthCodeMapper(): AuthCodeMapper
+    {
+        return new AuthCodeMapper();
+    }
 }

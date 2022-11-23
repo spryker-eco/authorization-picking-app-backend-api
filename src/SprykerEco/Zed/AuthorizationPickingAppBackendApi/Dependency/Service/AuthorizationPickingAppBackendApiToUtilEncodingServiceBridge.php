@@ -7,7 +7,7 @@
 
 namespace SprykerEco\Zed\AuthorizationPickingAppBackendApi\Dependency\Service;
 
-class AuthorizationPickingAppBackendApiToUtilEncodingServiceBridge implements OauthToUtilEncodingServiceInterface
+class AuthorizationPickingAppBackendApiToUtilEncodingServiceBridge implements AuthorizationPickingAppBackendApiToUtilEncodingServiceInterface
 {
     /**
      * @var \Spryker\Service\UtilEncoding\UtilEncodingServiceInterface
