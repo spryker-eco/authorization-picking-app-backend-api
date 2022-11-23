@@ -11,8 +11,8 @@ use Generated\Shared\Transfer\GlueResourceMethodCollectionTransfer;
 use Generated\Shared\Transfer\GlueResourceMethodConfigurationTransfer;
 use Spryker\Glue\GlueApplication\Plugin\GlueApplication\Backend\AbstractResourcePlugin;
 use Spryker\Glue\GlueApplicationExtension\Dependency\Plugin\ResourceInterface;
-use Spryker\Glue\OauthBackendApi\Controller\AuthorizeResourceController;
 use SprykerEco\Glue\AuthorizationPickingAppBackendApi\AuthorizationPickingAppBackendApiConfig;
+use SprykerEco\Glue\AuthorizationPickingAppBackendApi\Controller\AuthorizeResourceController;
 
 class AuthorizeResource extends AbstractResourcePlugin implements ResourceInterface
 {
@@ -33,7 +33,7 @@ class AuthorizeResource extends AbstractResourcePlugin implements ResourceInterf
      *
      * @api
      *
-     * @uses \Spryker\Glue\OauthBackendApi\Controller\AuthorizeResourceController
+     * @uses \SprykerEco\Glue\AuthorizationPickingAppBackendApi\Controller\AuthorizeResourceController
      *
      * @return string
      */

@@ -5,10 +5,22 @@
     "license": "MIT",
     "require": {
         "php": ">=7.3",
+        "psr/http-message": "*",
+        "spryker/glue-application-extension": "*",
+        "spryker/guzzle": "*",
+        "spryker/kernel": "*",
+        "spryker/propel-orm": "*",
+        "spryker/symfony": "*",
+        "spryker/user": "*",
+        "spryker/util-encoding": "*"
     },
     "require-dev": {
+        "phpstan/phpstan": "*",
+        "spryker/code-sniffer": "*",
+        "spryker/glue-application": "*"
     },
     "suggest": {
+        "spryker/glue-application": "ADD SUGGEST DESCRIPTION"
     },
     "autoload": {
         "psr-4": {

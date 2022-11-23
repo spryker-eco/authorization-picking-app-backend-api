@@ -12,7 +12,7 @@ use Generated\Shared\Transfer\SpyOauthAuthCodeEntityTransfer;
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use LogicException;
-use Spryker\Zed\Oauth\Business\Model\League\Entities\AuthCodeEntity;
+use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Entities\AuthCodeEntity;
 use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Dependency\Service\AuthorizationPickingAppBackendApiToUtilEncodingServiceInterface;
 use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Persistence\AuthorizationPickingAppBackendApiEntityManagerInterface;
 use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Persistence\AuthorizationPickingAppBackendApiRepositoryInterface;
