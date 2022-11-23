@@ -19,6 +19,13 @@ class AuthorizationPickingAppBackendApiConfig extends AbstractBundleConfig
     protected const GENERATED_FULL_FILE_NAME = '/Generated/Zed/Oauth/GlueScopesCache/glue_scopes_cache.yml';
 
     /**
+     * @uses \Spryker\Shared\Oauth\OauthConstants::ENCRYPTION_KEY()
+     *
+     * @var string
+     */
+    protected const ENCRYPTION_KEY = 'ENCRYPTION_KEY';
+
+    /**
      * @var bool
      */
     protected const OAUTH_REQUIRE_CODE_CHALLENGE = true;
@@ -73,5 +80,18 @@ class AuthorizationPickingAppBackendApiConfig extends AbstractBundleConfig
     public function isCodeChallengeRequired(): bool
     {
         return static::OAUTH_REQUIRE_CODE_CHALLENGE;
+    }
+
+    /**
+     * Specification:
+     * - Encryption key used to encrypt data when generates authorization code.
+     *
+     * @api
+     *
+     * @return string
+     */
+    public function getEncryptionKey(): string
+    {
+        return $this->get(static::ENCRYPTION_KEY);
     }
 }

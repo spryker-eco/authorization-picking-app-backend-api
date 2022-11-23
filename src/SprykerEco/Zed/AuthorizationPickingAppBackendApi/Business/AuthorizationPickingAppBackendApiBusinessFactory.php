@@ -48,6 +48,7 @@ class AuthorizationPickingAppBackendApiBusinessFactory extends AbstractBusinessF
         return new AuthorizationRequestProcessor(
             $this->createAuthCodeGrantType(),
             $this->createUserValidator(),
+            $this->getConfig(),
         );
     }
 

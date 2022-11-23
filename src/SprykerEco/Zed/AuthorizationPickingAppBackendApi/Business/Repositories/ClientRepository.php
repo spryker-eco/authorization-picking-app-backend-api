@@ -21,7 +21,7 @@ class ClientRepository implements ClientRepositoryInterface
     protected AuthorizationPickingAppBackendApiRepositoryInterface $authorizationRepository;
 
     /**
-     * @var array
+     * @var array<\Generated\Shared\Transfer\SpyOauthClientEntityTransfer|null>
      */
     protected static $authorizationClientEntityTransferCache = [];
 

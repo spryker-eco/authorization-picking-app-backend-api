@@ -26,6 +26,11 @@ class UserValidator implements UserValidatorInterface
     protected const REQUEST_PARAMETER_PASSWORD = 'password';
 
     /**
+     * @var string
+     */
+    protected const IDENTIFIER = 'authorization_code';
+
+    /**
      * @var \League\OAuth2\Server\Repositories\UserRepositoryInterface
      */
     protected $userRepository;
@@ -63,7 +68,7 @@ class UserValidator implements UserValidatorInterface
         $userEntity = $this->userRepository->getUserEntityByUserCredentials(
             $username,
             $password,
-            //            $this->getIdentifier(),
+            static::IDENTIFIER,
             $client,
         );
 

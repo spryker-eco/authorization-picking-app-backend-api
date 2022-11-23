@@ -5,7 +5,7 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace SprykerEco\Zed\AuthorizationPickingAppBackendApi\Exception;
+namespace SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Exception;
 
 use Exception;
 

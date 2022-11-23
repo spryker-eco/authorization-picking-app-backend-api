@@ -12,6 +12,7 @@ use Generated\Shared\Transfer\OauthScopeRequestTransfer;
 use Generated\Shared\Transfer\OauthScopeTransfer;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\ScopeEntityInterface;
+use League\OAuth2\Server\Repositories\ScopeRepositoryInterface;
 use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Entities\ScopeEntity;
 use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Finders\ScopeFinderInterface;
 use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Providers\ScopeProviderInterface;
@@ -53,13 +54,12 @@ class ScopeRepository implements ScopeRepositoryInterface
      * Return information about a scope.
      *
      * @param string $identifier The scope identifier
-     * @param string|null $applicationName
      *
      * @return \League\OAuth2\Server\Entities\ScopeEntityInterface|null
      */
-    public function getScopeEntityByIdentifier(string $identifier, ?string $applicationName = null): ?ScopeEntityInterface
+    public function getScopeEntityByIdentifier($identifier): ?ScopeEntityInterface
     {
-        $oauthScopeFindTransfer = (new OauthScopeFindTransfer())->setIdentifier($identifier)->setApplicationName($applicationName);
+        $oauthScopeFindTransfer = (new OauthScopeFindTransfer())->setIdentifier($identifier);
 
         if ($this->scopeFinder->find($oauthScopeFindTransfer)) {
             return $this->createScopeEntity($identifier);
@@ -81,29 +81,26 @@ class ScopeRepository implements ScopeRepositoryInterface
      * @param string $grantType
      * @param \League\OAuth2\Server\Entities\ClientEntityInterface $clientEntity
      * @param string|null $userIdentifier
-     * @param string|null $applicationName
      *
      * @return array<\League\OAuth2\Server\Entities\ScopeEntityInterface>
      */
     public function finalizeScopes(
         array $scopes,
-        string $grantType,
+        $grantType,
         ClientEntityInterface $clientEntity,
-        ?string $userIdentifier = null,
-        ?string $applicationName = null
+        $userIdentifier = null
     ): array {
-        $oauthScopeRequestTransfer = $this->mapOauthScopeRequestTransfer($scopes, $grantType, $clientEntity, $userIdentifier, $applicationName);
+        $oauthScopeRequestTransfer = $this->mapOauthScopeRequestTransfer($scopes, $grantType, $clientEntity, $userIdentifier);
         $providedScopes = $this->scopeProvider->provide($oauthScopeRequestTransfer);
 
         return $this->mapScopeEntities($providedScopes);
     }
 
     /**
-     * @param array $scopes
+     * @param array<\League\OAuth2\Server\Entities\ScopeEntityInterface> $scopes
      * @param string $grantType
      * @param \League\OAuth2\Server\Entities\ClientEntityInterface $clientEntity
      * @param string|null $userIdentifier
-     * @param string|null $applicationName
      *
      * @return \Generated\Shared\Transfer\OauthScopeRequestTransfer
      */
@@ -111,14 +108,12 @@ class ScopeRepository implements ScopeRepositoryInterface
         array $scopes,
         string $grantType,
         ClientEntityInterface $clientEntity,
-        ?string $userIdentifier = null,
-        ?string $applicationName = null
+        ?string $userIdentifier = null
     ): OauthScopeRequestTransfer {
         $oauthScopeRequestTransfer = (new OauthScopeRequestTransfer())
             ->setGrantType($grantType)
             ->setClientId($clientEntity->getIdentifier())
-            ->setClientName($clientEntity->getName())
-            ->setRequestApplication($applicationName);
+            ->setClientName($clientEntity->getName());
 
         if ($userIdentifier) {
             $oauthScopeRequestTransfer->setUserIdentifier($userIdentifier);
@@ -136,7 +131,7 @@ class ScopeRepository implements ScopeRepositoryInterface
     /**
      * @param array<\Generated\Shared\Transfer\OauthScopeTransfer> $providedScopes
      *
-     * @return array
+     * @return array<\League\OAuth2\Server\Entities\ScopeEntityInterface>
      */
     protected function mapScopeEntities(array $providedScopes): array
     {

@@ -38,12 +38,12 @@ class UserRepository implements UserRepositoryInterface
      * @return \League\OAuth2\Server\Entities\UserEntityInterface|null
      */
     public function getUserEntityByUserCredentials(
-        string $username,
-        string $password,
-        string $grantType,
+        $username,
+        $password,
+        $grantType,
         ClientEntityInterface $clientEntity
     ): ?UserEntityInterface {
-        $oauthUserTransfer = $this->createOauthUserTransfer($username, $password, /*$grantType, */$clientEntity);
+        $oauthUserTransfer = $this->createOauthUserTransfer($username, $password, $clientEntity);
         $oauthUserTransfer = $this->findUser($oauthUserTransfer);
 
         if ($oauthUserTransfer && $oauthUserTransfer->getIsSuccess() && $oauthUserTransfer->getUserIdentifier()) {
@@ -72,7 +72,6 @@ class UserRepository implements UserRepositoryInterface
     /**
      * @param string $username
      * @param string $password
-// * @param string $grantType
      * @param \League\OAuth2\Server\Entities\ClientEntityInterface $clientEntity
      *
      * @return \Generated\Shared\Transfer\OauthUserTransfer
@@ -80,7 +79,6 @@ class UserRepository implements UserRepositoryInterface
     protected function createOauthUserTransfer(
         string $username,
         string $password,
-        //        string $grantType,
         ClientEntityInterface $clientEntity
     ): OauthUserTransfer {
         $oauthUserTransfer = new OauthUserTransfer();
@@ -89,7 +87,6 @@ class UserRepository implements UserRepositoryInterface
             ->setUsername($username)
             ->setPassword($password)
             ->setClientId($clientEntity->getIdentifier())
-//            ->setGrantType($grantType)
             ->setClientName($clientEntity->getName());
 
         return $oauthUserTransfer;

@@ -41,6 +41,6 @@ class ScopeProvider implements ScopeProviderInterface
             $scopes[] = $oauthScopeTransfer;
         }
 
-        return array_merge(...$scopes);
+        return $scopes;
     }
 }

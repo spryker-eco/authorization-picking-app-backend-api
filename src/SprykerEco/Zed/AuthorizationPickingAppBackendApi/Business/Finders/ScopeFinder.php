@@ -9,8 +9,8 @@ namespace SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Finders;
 
 use Generated\Shared\Transfer\OauthScopeFindTransfer;
 use SprykerEco\Zed\AuthorizationPickingAppBackendApi\AuthorizationPickingAppBackendApiConfig;
+use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Exception\CacheFileNotFoundException;
 use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Dependency\External\AuthorizationPickingAppBackendApiToYamlAdapterInterface;
-use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Exception\CacheFileNotFoundException;
 
 class ScopeFinder implements ScopeFinderInterface
 {
@@ -51,7 +51,7 @@ class ScopeFinder implements ScopeFinderInterface
     /**
      * @param \Generated\Shared\Transfer\OauthScopeFindTransfer $oauthScopeFindTransfer
      *
-     * @throws \Spryker\Glue\GlueBackendApiApplication\Exception\CacheFileNotFoundException
+     * @throws \SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Exception\CacheFileNotFoundException
      *
      * @return string|null
      */

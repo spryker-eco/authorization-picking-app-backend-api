@@ -13,7 +13,6 @@ use League\OAuth2\Server\CodeChallengeVerifiers\PlainVerifier;
 use League\OAuth2\Server\CodeChallengeVerifiers\S256Verifier;
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
-use League\OAuth2\Server\Entities\ScopeEntityInterface;
 use League\OAuth2\Server\Entities\UserEntityInterface;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\Grant\AuthCodeGrant;
@@ -31,7 +30,7 @@ class AuthCodeGrantType extends AuthCodeGrant implements GrantTypeInterface
     /**
      * @var string
      */
-    protected const REQUEST_PARAMETER_APPLICATION_NAME = 'request_application';
+    protected const GLUE_BACKEND_API_APPLICATION = 'GLUE_BACKEND_API_APPLICATION';
 
     /**
      * @var string
@@ -84,11 +83,6 @@ class AuthCodeGrantType extends AuthCodeGrant implements GrantTypeInterface
     protected $authCodeRepository;
 
     /**
-     * @var \SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Repositories\ScopeRepositoryInterface
-     */
-    protected $scopeRepository;
-
-    /**
      * @var bool
      */
     protected $requireCodeChallengeForPublicClients = true;
@@ -97,11 +91,6 @@ class AuthCodeGrantType extends AuthCodeGrant implements GrantTypeInterface
      * @var array<\League\OAuth2\Server\CodeChallengeVerifiers\CodeChallengeVerifierInterface>
      */
     protected $codeChallengeVerifiers = [];
-
-    /**
-     * @var string
-     */
-    protected $applicationContext;
 
     /**
      * @param \SprykerEco\Zed\AuthorizationPickingAppBackendApi\AuthorizationPickingAppBackendApiConfig $config
@@ -113,6 +102,7 @@ class AuthCodeGrantType extends AuthCodeGrant implements GrantTypeInterface
     ) {
         $this->authCodeTTL = new DateInterval($config->getAuthCodeTTL());
         $this->setAuthCodeRepository($authCodeRepository);
+        $this->setEncryptionKey($config->getEncryptionKey());
 
         if ($config->isCodeChallengeRequired() === false) {
             $this->disableRequireCodeChallengeForPublicClients();
@@ -168,12 +158,9 @@ class AuthCodeGrantType extends AuthCodeGrant implements GrantTypeInterface
             throw OAuthServerException::invalidClient($request);
         }
 
-        //validate scopes
-        $this->applicationContext = $this->getRequestParameter(static::REQUEST_PARAMETER_APPLICATION_NAME, $request);
         $scopes = $this->validateScopes(
             $this->getQueryStringParameter(static::REQUEST_PARAMETER_SCOPE, $request, $this->defaultScope),
             $redirectUri ?? $clientRedirectUri,
-            $this->applicationContext,
         );
 
         $stateParameter = $this->getQueryStringParameter(static::REQUEST_PARAMETER_STATE, $request);
@@ -215,7 +202,6 @@ class AuthCodeGrantType extends AuthCodeGrant implements GrantTypeInterface
             $this->getIdentifier(),
             $authorizationRequest->getClient(),
             $authorizationRequest->getUser()->getIdentifier(),
-            $this->applicationContext,
         );
 
         // The user approved the client, redirect them back with an auth code
@@ -226,7 +212,6 @@ class AuthCodeGrantType extends AuthCodeGrant implements GrantTypeInterface
                 $authorizationRequest->getUser()->getIdentifier(),
                 $authorizationRequest->getRedirectUri(),
                 $scopes,
-                //                $authorizationRequest->getScopes(),
             );
 
             $payload = [
@@ -238,7 +223,7 @@ class AuthCodeGrantType extends AuthCodeGrant implements GrantTypeInterface
                 'expire_time' => (new DateTimeImmutable())->add($this->authCodeTTL)->getTimestamp(),
                 'code_challenge' => $authorizationRequest->getCodeChallenge(),
                 'code_challenge_method' => $authorizationRequest->getCodeChallengeMethod(),
-                'applicationContext' => $this->applicationContext,
+                'applicationContext' => static::GLUE_BACKEND_API_APPLICATION,
             ];
 
             $jsonPayload = json_encode($payload);
@@ -271,38 +256,6 @@ class AuthCodeGrantType extends AuthCodeGrant implements GrantTypeInterface
                 ],
             ),
         );
-    }
-
-    /**
-     * @param array|string $scopes
-     * @param string|null $redirectUri
-     * @param string|null $applicationName
-     *
-     * @throws \League\OAuth2\Server\Exception\OAuthServerException
-     *
-     * @return array<\League\OAuth2\Server\Entities\ScopeEntityInterface>
-     */
-    public function validateScopes($scopes, ?string $redirectUri = null, ?string $applicationName = null): array
-    {
-        if (is_string($scopes)) {
-            $scopes = $this->convertScopesQueryStringToArray($scopes);
-        }
-
-        if (!is_array($scopes)) {
-            throw OAuthServerException::invalidRequest(static::REQUEST_PARAMETER_SCOPE);
-        }
-
-        $validScopes = [];
-
-        foreach ($scopes as $scopeItem) {
-            $scope = $this->scopeRepository->getScopeEntityByIdentifier($scopeItem, $applicationName);
-
-            if ($scope instanceof ScopeEntityInterface) {
-                $validScopes[] = $scope;
-            }
-        }
-
-        return $validScopes;
     }
 
     /**
@@ -397,18 +350,6 @@ class AuthCodeGrantType extends AuthCodeGrant implements GrantTypeInterface
         }
 
         return $authorizationRequest;
-    }
-
-    /**
-     * @param string $scopes
-     *
-     * @return array<string>
-     */
-    protected function convertScopesQueryStringToArray(string $scopes): array
-    {
-        return array_filter(explode(static::SCOPE_DELIMITER_STRING, trim($scopes)), function ($scope) {
-            return $scope !== '';
-        });
     }
 
     /**

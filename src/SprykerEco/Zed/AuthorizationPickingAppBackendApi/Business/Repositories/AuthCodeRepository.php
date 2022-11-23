@@ -50,7 +50,7 @@ class AuthCodeRepository implements AuthCodeRepositoryInterface
     }
 
     /**
-     * @return \Spryker\Zed\Oauth\Business\Model\League\Entities\AuthCodeEntity
+     * @return \SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Entities\AuthCodeEntity
      */
     public function getNewAuthCode(): AuthCodeEntity
     {
@@ -88,7 +88,7 @@ class AuthCodeRepository implements AuthCodeRepositoryInterface
      *
      * @return void
      */
-    public function revokeAuthCode(string $codeId): void
+    public function revokeAuthCode($codeId): void
     {
         throw new LogicException('This grant does not use this method');
     }
@@ -100,7 +100,7 @@ class AuthCodeRepository implements AuthCodeRepositoryInterface
      *
      * @return bool
      */
-    public function isAuthCodeRevoked(string $codeId): bool
+    public function isAuthCodeRevoked($codeId): bool
     {
         throw new LogicException('This grant does not use this method');
     }

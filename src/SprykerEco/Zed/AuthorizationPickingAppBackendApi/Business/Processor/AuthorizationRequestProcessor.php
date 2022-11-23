@@ -22,6 +22,11 @@ use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Validator\UserVali
 class AuthorizationRequestProcessor implements AuthorizationRequestProcessorInterface
 {
     /**
+     * @var string
+     */
+    protected const HEADER_PARAM_LOCATION = 'Location';
+
+    /**
      * @var \League\OAuth2\Server\Grant\GrantTypeInterface
      */
     protected GrantTypeInterface $grantType;
@@ -62,7 +67,9 @@ class AuthorizationRequestProcessor implements AuthorizationRequestProcessorInte
             $authorizationRequest = $this->createAuthorizationRequest($oauthRequestTransfer);
 
             $authRequest = $this->grantType->validateAuthorizationRequest($authorizationRequest);
+
             $authRequest = $this->validateUser($oauthRequestTransfer, $authRequest);
+
             $authorizationResponse = $this->grantType
                 ->completeAuthorizationRequest($authRequest)
                 ->generateHttpResponse(new Response());

@@ -60,13 +60,14 @@ class AuthorizationPickingAppBackendApiRepository extends AbstractRepository imp
         foreach ($scopes as $scope) {
             $scopeIdentifiers[] = $scope->getIdentifier();
         }
-        //TODO add scope filtering
+
         $scopes = sprintf('["%s"]', implode('", "', $scopeIdentifiers));
 
         $authCodeEntity = $this->getFactory()
             ->createAuthCodeQuery()
             ->filterByFkOauthClient($client->getIdentifier())
             ->filterByExpirityDate(['min' => new DateTimeImmutable('now')], Criteria::GREATER_EQUAL)
+            ->filterByScopes($scopes)
             ->orderByIdOauthAuthCode(Criteria::DESC)
             ->findOne();
 
