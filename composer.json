@@ -9,6 +9,7 @@
         "spryker/glue-application-extension": "*",
         "spryker/guzzle": "*",
         "spryker/kernel": "*",
+        "spryker/oauth": "*",
         "spryker/propel-orm": "*",
         "spryker/symfony": "*",
         "spryker/user": "*",
@@ -50,8 +51,5 @@
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true
         }
-    },
-    "replace": {
-        "spryker/payone": "*"
     }
 }
