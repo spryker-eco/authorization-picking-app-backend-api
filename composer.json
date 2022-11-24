@@ -17,12 +17,19 @@
     },
     "require-dev": {
         "codeception/module-asserts": "^3.0.0",
-        "phpunit/phpunit": "^9.0.0",
         "phpstan/phpstan": "*",
+        "phpunit/phpunit": "^9.0.0",
+        "spryker/application": "*",
         "spryker/code-sniffer": "*",
+        "spryker/config": "*",
+        "spryker/error-handler": "*",
         "spryker/glue-application": "*",
+        "spryker/log": "*",
+        "spryker/monolog": "*",
         "spryker/propel": "^3.34.0",
-        "spryker/testify": "^3.47.0"
+        "spryker/queue": "*",
+        "spryker/testify": "^3.47.0",
+        "spryker/transfer": "*"
     },
     "suggest": {
         "spryker/glue-application": "If you want to use plugins with glue application."
