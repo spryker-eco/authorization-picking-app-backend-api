@@ -121,7 +121,6 @@ class AuthorizationPickingAppBackendApiBusinessTester extends Actor
             ->findOneOrCreate();
 
         $userEntity
-            ->setFkLocale(46)
             ->setUsername(static::USERNAME)
             ->setPassword(password_hash(static::PASSWORD, PASSWORD_BCRYPT))
             ->setLastName('Schmidt')
