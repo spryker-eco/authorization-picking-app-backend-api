@@ -46,6 +46,7 @@ class UserProvider implements UserProviderInterface
     {
         if (!$this->userFacade->hasActiveUserByUsername($oauthUserTransfer->getUsernameOrFail())) {
             dd('does not have active user');
+
             return $oauthUserTransfer;
         }
         dd('has active user');
