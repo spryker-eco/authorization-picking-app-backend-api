@@ -53,7 +53,6 @@ class AuthorizationPickingAppBackendApiFacadeTest extends Unit
             ->getFacade()
             ->authorize($oauthRequestTransfer);
 
-        dd($oauthResponseTransfer);
         //Assert
         $this->assertTrue($oauthResponseTransfer->getIsValid());
     }
