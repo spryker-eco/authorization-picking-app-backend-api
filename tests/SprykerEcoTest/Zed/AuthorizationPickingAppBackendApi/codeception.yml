@@ -31,10 +31,7 @@ suites:
                     isolated: true
                     schemaDirectories:
                         - src/*/Shared/*/Transfer/
-                        - vendor/spryker/*/src/Spryker/Shared/*/Transfer/
-                    dataBuilderSchemaDirectories:
-                        - tests/_data/
-                        - vendor/*/*/tests/_data/
+                        - vendor/*/*/src/*/Shared/*/Transfer/
                 - \SprykerTest\Shared\Testify\Helper\LocatorHelper:
                     projectNamespaces:
                         - 'Spryker'
