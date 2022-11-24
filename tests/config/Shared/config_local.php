@@ -11,6 +11,7 @@ use Spryker\Zed\PropelOrm\Business\Builder\QueryBuilder;
 // ----------------------------------------------------------------------------
 // ------------------------------ CODEBASE: TO REMOVE -------------------------
 // ----------------------------------------------------------------------------
+$config[KernelConstants::ENABLE_CONTAINER_OVERRIDING] = true;
 $config[KernelConstants::PROJECT_NAMESPACE] = 'Pyz';
 $config[KernelConstants::PROJECT_NAMESPACES] = [
     'Pyz',

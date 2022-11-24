@@ -39,11 +39,7 @@ if (!is_dir($configTargetDirectory)) {
 }
 
 spl_autoload_register(function ($className) {
-    if (
-        strrpos($className, 'Transfer') === false
-        && strrpos($className, 'Builder') === false
-        && strrpos($className, 'Spy') === false
-    ) {
+    if (strrpos($className, 'Transfer') === false) {
         return false;
     }
 
