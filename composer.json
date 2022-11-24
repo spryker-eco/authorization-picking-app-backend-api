@@ -21,7 +21,7 @@
         "phpstan/phpstan": "*",
         "spryker/code-sniffer": "*",
         "spryker/glue-application": "*",
-        "spryker/propel": "^3.34.0",
+        "spryker/propel": "*",
         "spryker/testify": "*"
     },
     "suggest": {
@@ -58,5 +58,8 @@
             "dealerdirect/phpcodesniffer-composer-installer": true,
             "ocramius/package-versions": false
         }
-    }
+    },
+    "include-path": [
+        "src/"
+    ]
 }
