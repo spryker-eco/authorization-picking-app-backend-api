@@ -14,7 +14,7 @@ use Spryker\Zed\Propel\PropelConfig;
 // ------------------------------ CODEBASE: TO REMOVE -------------------------
 // ----------------------------------------------------------------------------
 $config[KernelConstants::SPRYKER_ROOT] = APPLICATION_ROOT_DIR . '../../vendor/spryker/spryker/Bundles';
-$config[KernelConstants::RESOLVABLE_CLASS_NAMES_CACHE_ENABLED] = true;
+$config[KernelConstants::RESOLVABLE_CLASS_NAMES_CACHE_ENABLED] = false;
 $config[KernelConstants::RESOLVED_INSTANCE_CACHE_ENABLED] = true;
 $config[KernelConstants::PROJECT_NAMESPACE] = 'Pyz';
 $config[KernelConstants::PROJECT_NAMESPACES] = [
