@@ -3,6 +3,7 @@
 
     <transfer name="OauthRequest">
         <property name="grantType" type="string"/>
+        <property name="responseType" type="string"/>
     </transfer>
 
     <transfer name="GlueResponse">
