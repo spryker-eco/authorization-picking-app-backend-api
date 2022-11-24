@@ -43,7 +43,7 @@
         "cs-check": "phpcs -p -s --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml src/ tests/",
         "cs-fix": "phpcbf -p --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml src/ tests/",
         "stan": "phpstan analyse -c phpstan.neon -l 7 src/",
-        "test": "vendor/bin/codecept run"
+        "test": "codecept build && codecept run"
     },
     "extra": {
         "branch-alias": {
@@ -51,7 +51,6 @@
         }
     },
     "config": {
-        "preferred-install": "dist",
         "sort-packages": true,
         "process-timeout": 600,
         "allow-plugins": {
