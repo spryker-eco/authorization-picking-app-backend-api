@@ -1,5 +1,7 @@
 <?php
+
 use Spryker\Shared\Config\Config;
+
 if (!defined('MODULE_ROOT_DIR')) {
     define('MODULE_ROOT_DIR', realpath(__DIR__ . DIRECTORY_SEPARATOR . '..') . DIRECTORY_SEPARATOR);
 }
