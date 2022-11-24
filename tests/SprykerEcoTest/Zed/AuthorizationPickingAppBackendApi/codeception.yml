@@ -22,6 +22,9 @@ suites:
                 - \SprykerTest\Shared\Testify\Helper\ConfigHelper
                 - \SprykerTest\Shared\Propel\Helper\PropelHelper:
                     isolated: true
+                    schemaSourceDirectoryList:
+                        - src/*/Zed/*/Persistence/Propel/Schema/
+                        - vendor/*/*/src/*/Zed/*/Persistence/Propel/Schema/
                 - \SprykerTest\Shared\Testify\Helper\LocatorHelper:
                     coreNamespaces:
                         - 'SprykerEco'
