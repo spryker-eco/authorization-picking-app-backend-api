@@ -61,8 +61,7 @@
         "sort-packages": true,
         "process-timeout": 600,
         "allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": true,
-            "ocramius/package-versions": false
+            "dealerdirect/phpcodesniffer-composer-installer": true
         }
     },
     "include-path": [

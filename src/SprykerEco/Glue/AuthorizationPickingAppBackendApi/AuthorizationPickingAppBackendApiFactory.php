@@ -8,7 +8,7 @@
 namespace SprykerEco\Glue\AuthorizationPickingAppBackendApi;
 
 use Spryker\Glue\Kernel\Backend\AbstractBackendApiFactory;
-use SprykerEco\Glue\AuthorizationPickingAppBackendApi\Dependency\Facade\AuthorizationPickingAppBackendApiToAuthorizationPickingAppBackendApiFacadeInterface;
+use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\AuthorizationPickingAppBackendApiFacadeInterface;
 
 /**
  * @method \SprykerEco\Glue\AuthorizationPickingAppBackendApi\AuthorizationPickingAppBackendApiConfig getConfig()
@@ -16,9 +16,9 @@ use SprykerEco\Glue\AuthorizationPickingAppBackendApi\Dependency\Facade\Authoriz
 class AuthorizationPickingAppBackendApiFactory extends AbstractBackendApiFactory
 {
     /**
-     * @return \SprykerEco\Glue\AuthorizationPickingAppBackendApi\Dependency\Facade\AuthorizationPickingAppBackendApiToAuthorizationPickingAppBackendApiFacadeInterface
+     * @return \SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\AuthorizationPickingAppBackendApiFacadeInterface
      */
-    public function getAuthorizationPickingAppBackendApiFacade(): AuthorizationPickingAppBackendApiToAuthorizationPickingAppBackendApiFacadeInterface
+    public function getAuthorizationPickingAppBackendApiFacade(): AuthorizationPickingAppBackendApiFacadeInterface
     {
         return $this->getProvidedDependency(AuthorizationPickingAppBackendApiDependencyProvider::FACADE_AUTHORIZATION_PICKING_APP_BACKEND_API);
     }

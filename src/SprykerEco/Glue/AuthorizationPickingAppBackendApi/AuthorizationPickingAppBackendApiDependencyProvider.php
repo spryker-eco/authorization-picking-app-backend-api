@@ -9,7 +9,6 @@ namespace SprykerEco\Glue\AuthorizationPickingAppBackendApi;
 
 use Spryker\Glue\Kernel\Backend\AbstractBundleDependencyProvider;
 use Spryker\Glue\Kernel\Backend\Container;
-use SprykerEco\Glue\AuthorizationPickingAppBackendApi\Dependency\Facade\AuthorizationPickingAppBackendApiToAuthorizationPickingAppBackendApiFacadeBridge;
 
 /**
  * @method \SprykerEco\Glue\AuthorizationPickingAppBackendApi\AuthorizationPickingAppBackendApiConfig getConfig()
@@ -42,7 +41,7 @@ class AuthorizationPickingAppBackendApiDependencyProvider extends AbstractBundle
     protected function addAuthorizationPickingAppBackendApiFacade(Container $container): Container
     {
         $container->set(static::FACADE_AUTHORIZATION_PICKING_APP_BACKEND_API, function (Container $container) {
-            return new AuthorizationPickingAppBackendApiToAuthorizationPickingAppBackendApiFacadeBridge($container->getLocator()->authorizationPickingAppBackendApi()->facade());
+            return $container->getLocator()->authorizationPickingAppBackendApi()->facade();
         });
 
         return $container;

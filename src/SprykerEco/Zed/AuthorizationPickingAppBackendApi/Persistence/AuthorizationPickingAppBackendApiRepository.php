@@ -28,7 +28,7 @@ class AuthorizationPickingAppBackendApiRepository extends AbstractRepository imp
     public function findClientByIdentifier(string $identifier): ?SpyOauthClientEntityTransfer
     {
         $query = $this->getFactory()
-            ->createOauthClientQuery()
+            ->getOauthClientPropelQuery() # OauthClientQuery was injected through DependencyProvider - spy_oauth_client is defined in another module and dependency resolved through DependencyProvider
             ->filterByIdentifier($identifier);
 
         return $this->buildQueryFromCriteria($query)->findOne();
@@ -42,7 +42,7 @@ class AuthorizationPickingAppBackendApiRepository extends AbstractRepository imp
     public function findScopeByIdentifier(string $identifier): ?SpyOauthScopeEntityTransfer
     {
         $query = $this->getFactory()
-            ->createScopeQuery()
+            ->getOauthScopePropelQuery() # OauthScopeQuery was injected through DependencyProvider - spy_oauth_scope is defined in another module and dependency resolved through DependencyProvider
             ->filterByIdentifier($identifier);
 
         return $this->buildQueryFromCriteria($query)->findOne();
@@ -64,7 +64,7 @@ class AuthorizationPickingAppBackendApiRepository extends AbstractRepository imp
         $scopes = sprintf('["%s"]', implode('", "', $scopeIdentifiers));
 
         $authCodeEntity = $this->getFactory()
-            ->createAuthCodeQuery()
+            ->getOauthAuthCodePropelQuery() # OauthAuthCodeQuery was injected through DependencyProvider - spy_oauth_auth_code is defined in another module and dependency resolved through DependencyProvider
             ->filterByFkOauthClient($client->getIdentifier())
             ->filterByExpirityDate(['min' => new DateTimeImmutable('now')], Criteria::GREATER_EQUAL)
             ->filterByScopes($scopes)

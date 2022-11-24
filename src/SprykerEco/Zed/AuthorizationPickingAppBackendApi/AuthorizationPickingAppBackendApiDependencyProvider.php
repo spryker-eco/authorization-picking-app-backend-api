@@ -7,6 +7,9 @@
 
 namespace SprykerEco\Zed\AuthorizationPickingAppBackendApi;
 
+use Orm\Zed\Oauth\Persistence\SpyOauthAuthCodeQuery;
+use Orm\Zed\Oauth\Persistence\SpyOauthClientQuery;
+use Orm\Zed\Oauth\Persistence\SpyOauthScopeQuery;
 use Spryker\Zed\Kernel\AbstractBundleDependencyProvider;
 use Spryker\Zed\Kernel\Container;
 use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Dependency\External\AuthorizationPickingAppBackendApiToYamlAdapter;
@@ -34,6 +37,21 @@ class AuthorizationPickingAppBackendApiDependencyProvider extends AbstractBundle
     public const FACADE_USER = 'FACADE_USER';
 
     /**
+     * @var string
+     */
+    public const PROPEL_QUERY_OAUTH_AUTH_CODE = 'PROPEL_QUERY_OAUTH_AUTH_CODE';
+
+    /**
+     * @var string
+     */
+    public const PROPEL_QUERY_OAUTH_CLIENT = 'PROPEL_QUERY_OAUTH_CLIENT';
+
+    /**
+     * @var string
+     */
+    public const PROPEL_QUERY_OAUTH_SCOPE = 'PROPEL_QUERY_OAUTH_SCOPE';
+
+    /**
      * @param \Spryker\Zed\Kernel\Container $container
      *
      * @return \Spryker\Zed\Kernel\Container
@@ -44,6 +62,21 @@ class AuthorizationPickingAppBackendApiDependencyProvider extends AbstractBundle
         $container = $this->addUtilEncodingService($container);
         $container = $this->addYamlAdapter($container);
         $container = $this->addUserFacade($container);
+
+        return $container;
+    }
+
+    /**
+     * @param \Spryker\Zed\Kernel\Container $container
+     *
+     * @return \Spryker\Zed\Kernel\Container
+     */
+    public function providePersistenceLayerDependencies(Container $container): Container
+    {
+        $container = parent::providePersistenceLayerDependencies($container);
+        $container = $this->addOauthAuthCodePropelQuery($container);
+        $container = $this->addOauthClientPropelQuery($container);
+        $container = $this->addOauthScopePropelQuery($container);
 
         return $container;
     }
@@ -88,6 +121,48 @@ class AuthorizationPickingAppBackendApiDependencyProvider extends AbstractBundle
         $container->set(static::FACADE_USER, function (Container $container) {
             return new AuthorizationPickingAppBackendApiToUserFacadeBridge($container->getLocator()->user()->facade());
         });
+
+        return $container;
+    }
+
+    /**
+     * @param \Spryker\Zed\Kernel\Container $container
+     *
+     * @return \Spryker\Zed\Kernel\Container
+     */
+    protected function addOauthAuthCodePropelQuery(Container $container): Container
+    {
+        $container->set(static::PROPEL_QUERY_OAUTH_AUTH_CODE, $container->factory(function () {
+            return SpyOauthAuthCodeQuery::create();
+        }));
+
+        return $container;
+    }
+
+    /**
+     * @param \Spryker\Zed\Kernel\Container $container
+     *
+     * @return \Spryker\Zed\Kernel\Container
+     */
+    protected function addOauthClientPropelQuery(Container $container): Container
+    {
+        $container->set(static::PROPEL_QUERY_OAUTH_CLIENT, $container->factory(function () {
+            return SpyOauthClientQuery::create();
+        }));
+
+        return $container;
+    }
+
+    /**
+     * @param \Spryker\Zed\Kernel\Container $container
+     *
+     * @return \Spryker\Zed\Kernel\Container
+     */
+    protected function addOauthScopePropelQuery(Container $container): Container
+    {
+        $container->set(static::PROPEL_QUERY_OAUTH_SCOPE, $container->factory(function () {
+            return SpyOauthScopeQuery::create();
+        }));
 
         return $container;
     }

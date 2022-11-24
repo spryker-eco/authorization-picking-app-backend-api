@@ -11,6 +11,7 @@ use Orm\Zed\Oauth\Persistence\SpyOauthAuthCodeQuery;
 use Orm\Zed\Oauth\Persistence\SpyOauthClientQuery;
 use Orm\Zed\Oauth\Persistence\SpyOauthScopeQuery;
 use Spryker\Zed\Kernel\Persistence\AbstractPersistenceFactory;
+use SprykerEco\Zed\AuthorizationPickingAppBackendApi\AuthorizationPickingAppBackendApiDependencyProvider;
 use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Persistence\Propel\Mapper\AuthCodeMapper;
 
 /**
@@ -23,25 +24,25 @@ class AuthorizationPickingAppBackendApiPersistenceFactory extends AbstractPersis
     /**
      * @return \Orm\Zed\Oauth\Persistence\SpyOauthAuthCodeQuery
      */
-    public function createAuthCodeQuery(): SpyOauthAuthCodeQuery
+    public function getOauthAuthCodePropelQuery(): SpyOauthAuthCodeQuery
     {
-        return SpyOauthAuthCodeQuery::create();
+        return $this->getProvidedDependency(AuthorizationPickingAppBackendApiDependencyProvider::PROPEL_QUERY_OAUTH_AUTH_CODE);
     }
 
     /**
      * @return \Orm\Zed\Oauth\Persistence\SpyOauthClientQuery
      */
-    public function createOauthClientQuery(): SpyOauthClientQuery
+    public function getOauthClientPropelQuery(): SpyOauthClientQuery
     {
-        return SpyOauthClientQuery::create();
+        return $this->getProvidedDependency(AuthorizationPickingAppBackendApiDependencyProvider::PROPEL_QUERY_OAUTH_CLIENT);
     }
 
     /**
      * @return \Orm\Zed\Oauth\Persistence\SpyOauthScopeQuery
      */
-    public function createScopeQuery(): SpyOauthScopeQuery
+    public function getOauthScopePropelQuery(): SpyOauthScopeQuery
     {
-        return SpyOauthScopeQuery::create();
+        return $this->getProvidedDependency(AuthorizationPickingAppBackendApiDependencyProvider::PROPEL_QUERY_OAUTH_SCOPE);
     }
 
     /**

@@ -40,7 +40,7 @@ class AuthorizationPickingAppBackendApiConfig extends AbstractBundleConfig
      */
     public function getAuthCodeTTL(): string
     {
-        return 'PT10M';
+        return 'PT1M';
     }
 
     /**
