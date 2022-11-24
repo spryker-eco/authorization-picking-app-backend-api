@@ -19,12 +19,13 @@ suites:
             enabled:
                 - Asserts
                 - \SprykerTest\Shared\Testify\Helper\Environment
+                - \SprykerTest\Shared\Testify\Helper\ConfigHelper
+                - \SprykerTest\Shared\Propel\Helper\PropelHelper:
+                    isolated: true
                 - \SprykerTest\Shared\Testify\Helper\LocatorHelper:
                     coreNamespaces:
                         - 'SprykerEco'
                         - 'SprykerEcoTest'
-                - \SprykerTest\Shared\Propel\Helper\PropelHelper:
-                    isolated: true
                 - \SprykerTest\Shared\Testify\Helper\DependencyHelper
                 - \SprykerTest\Shared\Propel\Helper\TransactionHelper
                 - \SprykerTest\Shared\Testify\Helper\DataCleanupHelper
