@@ -5,6 +5,7 @@ use Spryker\Shared\Application\Log\Config\SprykerLoggerConfig;
 use Spryker\Shared\ErrorHandler\ErrorHandlerConstants;
 use Spryker\Shared\Kernel\KernelConstants;
 use Spryker\Shared\Log\LogConstants;
+use Spryker\Shared\Oauth\OauthConstants;
 use Spryker\Shared\Propel\PropelConstants;
 use Spryker\Shared\Queue\QueueConstants;
 use Spryker\Zed\Propel\PropelConfig;
@@ -25,6 +26,9 @@ $config[KernelConstants::CORE_NAMESPACES] = [
     'Spryker',
     'SprykerSdk',
 ];
+
+$config[OauthConstants::ENCRYPTION_KEY] = 'lxZFUEsBCJ2Yb14IF2ygAHI5N4+ZAUXXaSeeJm6+twsUmIen';
+
 
 // ----------------------------------------------------------------------------
 // ------------------------------- LOGGING ------------------------------------
