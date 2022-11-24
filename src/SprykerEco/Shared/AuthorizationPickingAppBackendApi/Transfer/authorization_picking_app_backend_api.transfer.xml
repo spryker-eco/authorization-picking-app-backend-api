@@ -4,6 +4,13 @@
     <transfer name="OauthRequest">
         <property name="grantType" type="string"/>
         <property name="responseType" type="string"/>
+        <property name="clientId" type="string"/>
+        <property name="clientSecret" type="string"/>
+        <property name="username" type="string"/>
+        <property name="password" type="string"/>
+        <property name="responseType" type="string"/>
+        <property name="codeChallenge" type="string"/>
+        <property name="codeChallengeMethod" type="string"/>
     </transfer>
 
     <transfer name="GlueResponse">
