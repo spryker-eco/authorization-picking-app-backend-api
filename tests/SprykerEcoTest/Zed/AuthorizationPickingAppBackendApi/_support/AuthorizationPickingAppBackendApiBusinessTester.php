@@ -12,6 +12,7 @@ namespace SprykerEcoTest\Zed\AuthorizationPickingAppBackendApi;
 use Codeception\Actor;
 use Generated\Shared\Transfer\OauthRequestTransfer;
 use Orm\Zed\Oauth\Persistence\SpyOauthClientQuery;
+use Orm\Zed\User\Persistence\SpyUserQuery;
 
 /**
  * Inherited Methods
@@ -47,6 +48,11 @@ class AuthorizationPickingAppBackendApiBusinessTester extends Actor
      * @var string
      */
     protected const CLIENT_SECRET = 'CLIENT_SECRET';
+
+    /**
+     * @var string
+     */
+    protected const USERNAME = 'harald@spryker.com';
 
     /**
      * @var string
@@ -102,6 +108,24 @@ class AuthorizationPickingAppBackendApiBusinessTester extends Actor
             ->setSecret(password_hash(static::CLIENT_SECRET, PASSWORD_BCRYPT))
             ->setIsConfidential(false)
             ->setRedirectUri('/')
+            ->save();
+    }
+
+    /**
+     * @return void
+     */
+    public function createTestUser(): void
+    {
+        $userEntity = SpyUserQuery::create()
+            ->filterByUsername(static::USERNAME)
+            ->findOneOrCreate();
+
+        $userEntity
+            ->setFkLocale(46)
+            ->setUsername(static::USERNAME)
+            ->setPassword(password_hash(static::PASSWORD, PASSWORD_BCRYPT))
+            ->setLastName('Schmidt')
+            ->setFirstName('Harald')
             ->save();
     }
 }

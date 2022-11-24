@@ -43,6 +43,7 @@ class AuthorizationPickingAppBackendApiFacadeTest extends Unit
     {
         //Arrange
         $this->tester->createTestClient();
+        $this->tester->createTestUser();
         $oauthRequestTransfer = $this->tester->createOauthRequestTransfer(
             static::USERNAME,
         );
@@ -64,6 +65,7 @@ class AuthorizationPickingAppBackendApiFacadeTest extends Unit
     {
         //Arrange
         $this->tester->createTestClient();
+        $this->tester->createTestUser();
         $oauthRequestTransfer = $this->tester->createOauthRequestTransfer(
             static::USERNAME_INVALID,
         );
