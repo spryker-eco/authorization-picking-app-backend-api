@@ -20,10 +20,10 @@ suites:
                 - Asserts
                 - \SprykerTest\Shared\Testify\Helper\Environment
                 - \SprykerTest\Shared\Testify\Helper\LocatorHelper:
-                    projectNamespaces:
+                    coreNamespaces:
                         - 'SprykerEco'
                         - 'SprykerEcoTest'
-                - \SprykerTest\Shared\Transfer\Helper\TransferGenerateHelper:
+                - \SprykerTest\Shared\Propel\Helper\PropelHelper:
                     isolated: true
                 - \SprykerTest\Shared\Testify\Helper\DependencyHelper
                 - \SprykerTest\Shared\Propel\Helper\TransactionHelper
