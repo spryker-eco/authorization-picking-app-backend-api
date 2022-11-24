@@ -1,5 +1,6 @@
 <?php
 
+use Spryker\Shared\ErrorHandler\ErrorHandlerConstants;
 use Spryker\Shared\Kernel\KernelConstants;
 use Spryker\Shared\Propel\PropelConstants;
 use Spryker\Zed\Propel\PropelConfig;
@@ -11,6 +12,7 @@ use Spryker\Zed\PropelOrm\Business\Builder\QueryBuilder;
 // ----------------------------------------------------------------------------
 // ------------------------------ CODEBASE: TO REMOVE -------------------------
 // ----------------------------------------------------------------------------
+$config[ErrorHandlerConstants::ERROR_LEVEL] = E_ALL;
 $config[KernelConstants::ENABLE_CONTAINER_OVERRIDING] = true;
 $config[KernelConstants::PROJECT_NAMESPACE] = 'Pyz';
 $config[KernelConstants::PROJECT_NAMESPACES] = [
