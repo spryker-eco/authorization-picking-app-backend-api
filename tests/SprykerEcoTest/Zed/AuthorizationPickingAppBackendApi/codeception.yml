@@ -26,6 +26,7 @@ suites:
                 - \SprykerTest\Shared\Propel\Helper\PropelHelper:
                     isolated: true
                     schemaSourceDirectoryList:
+                        - src/*/Zed/*/Persistence/Propel/Schema/
                         - vendor/*/*/src/*/Zed/*/Persistence/Propel/Schema/
                 - \SprykerTest\Shared\Transfer\Helper\TransferGenerateHelper:
                     isolated: true
