@@ -22,7 +22,7 @@
         "spryker/code-sniffer": "*",
         "spryker/glue-application": "*",
         "spryker/propel": "^3.34.0",
-        "spryker/testify": "^3.42.0"
+        "spryker/testify": "*"
     },
     "suggest": {
         "spryker/glue-application": "If you want to use plugins with glue application."
