@@ -1,45 +1,36 @@
 <?php
-
 use Spryker\Shared\Config\Config;
-
-if (!defined('APPLICATION')) {
-    define('APPLICATION', 'AuthorizationPickingAppBackendApi');
+if (!defined('MODULE_ROOT_DIR')) {
+    define('MODULE_ROOT_DIR', realpath(__DIR__ . DIRECTORY_SEPARATOR . '..') . DIRECTORY_SEPARATOR);
 }
-
 if (!defined('APPLICATION_ROOT_DIR')) {
     define('APPLICATION_ROOT_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR);
 }
-
 if (!defined('APPLICATION_VENDOR_DIR')) {
-    define('APPLICATION_VENDOR_DIR', APPLICATION_ROOT_DIR . 'vendor');
+    define('APPLICATION_VENDOR_DIR', realpath(__DIR__ . DIRECTORY_SEPARATOR . '..') . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR);
 }
-
 if (!defined('APPLICATION_STORE')) {
     define('APPLICATION_STORE', 'DE');
 }
-
 if (!defined('APPLICATION_ENV')) {
-    define('APPLICATION_ENV', 'development');
+    define('APPLICATION_ENV', 'dev');
 }
-
-if (!defined('APPLICATION_SOURCE_DIR')) {
-    define('APPLICATION_SOURCE_DIR', APPLICATION_ROOT_DIR . 'src' . DIRECTORY_SEPARATOR);
-}
-
-if (!defined('MODULE_UNDER_TEST_ROOT_DIR')) {
-    define('MODULE_UNDER_TEST_ROOT_DIR', '');
-}
-
 // Copy config files
-$configSourceDirectory = APPLICATION_ROOT_DIR . '..' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'Shared' . DIRECTORY_SEPARATOR;
-$configTargetDirectory = APPLICATION_ROOT_DIR . 'config' . DIRECTORY_SEPARATOR . 'Shared' . DIRECTORY_SEPARATOR;
-
-if (!is_dir($configTargetDirectory)) {
-    mkdir($configTargetDirectory, 0777, true);
+$configSharedTargetDirectory = APPLICATION_ROOT_DIR . 'config' . DIRECTORY_SEPARATOR . 'Shared' . DIRECTORY_SEPARATOR;
+if (!is_dir($configSharedTargetDirectory)) {
+    mkdir($configSharedTargetDirectory, 0777, true);
+}
+$configZedTargetDirectory = APPLICATION_ROOT_DIR . 'config' . DIRECTORY_SEPARATOR . 'Zed' . DIRECTORY_SEPARATOR;
+if (!is_dir($configZedTargetDirectory)) {
+    mkdir($configZedTargetDirectory, 0777, true);
 }
 
 spl_autoload_register(function ($className) {
-    if (strrpos($className, 'Transfer') === false) {
+    if (
+        strrpos($className, 'Transfer') === false
+        && strrpos($className, 'Builder') === false
+        && strrpos($className, 'Spy') === false
+    ) {
         return false;
     }
 
@@ -57,8 +48,11 @@ spl_autoload_register(function ($className) {
     return true;
 });
 
-copy($configSourceDirectory . 'config_local.php', $configTargetDirectory . 'config_local.php');
-
+$configSourceDirectory = MODULE_ROOT_DIR . 'ci' . DIRECTORY_SEPARATOR;
+copy($configSourceDirectory . 'config_default.php', $configSharedTargetDirectory . 'config_default.php');
+copy($configSourceDirectory . 'config_propel.php', $configSharedTargetDirectory . 'config_propel.php');
+//copy($configSourceDirectory . 'default_store.php', $configSharedTargetDirectory . 'default_store.php');
+//
+//copy($configSourceDirectory . 'stores.php', $configSharedTargetDirectory . 'stores.php');
 $config = Config::getInstance();
-
 $config->init();
