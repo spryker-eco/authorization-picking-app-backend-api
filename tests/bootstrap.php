@@ -17,6 +17,10 @@ if (!defined('APPLICATION_STORE')) {
 if (!defined('APPLICATION_ENV')) {
     define('APPLICATION_ENV', 'dev');
 }
+if (!defined('APPLICATION_SOURCE_DIR')) {
+    define('APPLICATION_SOURCE_DIR', APPLICATION_ROOT_DIR . 'src' . DIRECTORY_SEPARATOR);
+}
+
 // Copy config files
 $configSharedTargetDirectory = APPLICATION_ROOT_DIR . 'config' . DIRECTORY_SEPARATOR . 'Shared' . DIRECTORY_SEPARATOR;
 if (!is_dir($configSharedTargetDirectory)) {
