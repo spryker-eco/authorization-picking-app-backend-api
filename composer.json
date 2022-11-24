@@ -9,7 +9,7 @@
         "spryker/glue-application-extension": "^1.10.0",
         "spryker/guzzle": "^2.0.0",
         "spryker/kernel": "^3.52.0",
-        "spryker/oauth": "^2.7.0",
+        "spryker/oauth": "^2.6.0",
         "spryker/propel-orm": "^1.16.0",
         "spryker/symfony": "^3.0.0",
         "spryker/user": "^3.9.0",
@@ -22,8 +22,7 @@
         "spryker/code-sniffer": "*",
         "spryker/glue-application": "*",
         "spryker/propel": "^3.34.0",
-        "spryker/testify": "^3.47.0",
-        "spryker/spryker": "dev-feature/frw-458/dev-authorization-code-flow"
+        "spryker/testify": "^3.47.0"
     },
     "suggest": {
         "spryker/glue-application": "If you want to use plugins with glue application."
