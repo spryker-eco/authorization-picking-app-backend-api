@@ -113,7 +113,7 @@ class AuthorizationRequestProcessor implements AuthorizationRequestProcessorInte
      * @param \Psr\Http\Message\ResponseInterface $response
      * @param array<string>|null $data
      *
-     * @return array<string>
+     * @return array<mixed>
      */
     protected function expandDataWithHeaderParams(ResponseInterface $response, ?array $data): array
     {
