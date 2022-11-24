@@ -109,6 +109,9 @@
     </transfer>
 
     <transfer name="User">
+        <property name="userReference" type="string"/>
+        <property name="idUser" type="int"/>
+        <property name="password" type="string"/>
     </transfer>
 
 </transfers>
