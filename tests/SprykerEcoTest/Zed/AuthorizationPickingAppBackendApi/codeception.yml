@@ -19,15 +19,16 @@ suites:
         modules:
             enabled:
                 - Asserts
-                - \SprykerTest\Shared\Testify\Helper\Environment
+                - \SprykerTest\Shared\Testify\Helper\Environment:
+                    isolated: true
                 - \SprykerTest\Zed\Testify\Helper\Business\BusinessHelper
                 - \SprykerTest\Shared\Testify\Helper\ConfigHelper
                 - \SprykerTest\Shared\Propel\Helper\PropelHelper:
                     isolated: true
                     schemaSourceDirectoryList:
-                        - vendor/*/*/src/*/Zed/Oauth/Persistence/Propel/Schema/
+                        - vendor/*/*/src/*/Zed/*/Persistence/Propel/Schema/
                 - \SprykerTest\Shared\Testify\Helper\LocatorHelper:
-                    coreNamespaces:
+                    projectNamespaces:
                         - 'Spryker'
                         - 'SprykerTest'
                         - 'SprykerEco'
@@ -37,9 +38,6 @@ suites:
                     schemaDirectories:
                         - src/*/Shared/*/Transfer/
                         - vendor/spryker/*/src/Spryker/Shared/*/Transfer/
-                    dataBuilderSchemaDirectories:
-                        - tests/_data/
-                        - vendor/*/*/tests/_data/
                 - \SprykerTest\Shared\Testify\Helper\DependencyHelper
                 - \SprykerTest\Shared\Propel\Helper\TransactionHelper
                 - \SprykerTest\Shared\Testify\Helper\DataCleanupHelper
