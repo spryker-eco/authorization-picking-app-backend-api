@@ -60,11 +60,5 @@
     },
     "include-path": [
         "src/"
-    ],
-    "repositories": [
-        {
-            "type": "git",
-            "url": "git@github.com:spryker/spryker.git"
-        }
     ]
 }
