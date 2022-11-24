@@ -57,6 +57,16 @@ class AuthorizationPickingAppBackendApiBusinessTester extends Actor
     /**
      * @var string
      */
+    protected const FIRST_NAME = 'Harald';
+
+    /**
+     * @var string
+     */
+    protected const LAST_NAME = 'Schmidt';
+
+    /**
+     * @var string
+     */
     protected const PASSWORD = 'change123';
 
     /**
@@ -123,8 +133,8 @@ class AuthorizationPickingAppBackendApiBusinessTester extends Actor
         $userEntity
             ->setUsername(static::USERNAME)
             ->setPassword(password_hash(static::PASSWORD, PASSWORD_BCRYPT))
-            ->setLastName('Schmidt')
-            ->setFirstName('Harald')
+            ->setLastName(static::LAST_NAME)
+            ->setFirstName(static::FIRST_NAME)
             ->save();
     }
 }

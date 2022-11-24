@@ -44,9 +44,6 @@ class UserProvider implements UserProviderInterface
      */
     public function provide(OauthUserTransfer $oauthUserTransfer): OauthUserTransfer
     {
-        $userCriteriaTransfer = (new UserCriteriaTransfer())
-            ->setEmail($oauthUserTransfer->getUsername());
-        dd([$oauthUserTransfer, $this->userFacade->findUser($userCriteriaTransfer)]);
         if (!$this->userFacade->hasActiveUserByUsername($oauthUserTransfer->getUsernameOrFail())) {
             return $oauthUserTransfer;
         }
