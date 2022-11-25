@@ -8,7 +8,6 @@
         <property name="clientSecret" type="string"/>
         <property name="username" type="string"/>
         <property name="password" type="string"/>
-        <property name="responseType" type="string"/>
         <property name="codeChallenge" type="string"/>
         <property name="codeChallengeMethod" type="string"/>
     </transfer>

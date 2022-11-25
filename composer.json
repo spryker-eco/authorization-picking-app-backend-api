@@ -29,7 +29,7 @@
         "spryker/propel": "^3.34.0",
         "spryker/queue": "*",
         "spryker/testify": "^3.47.0",
-        "spryker/transfer": "*"
+        "spryker/transfer": "^3.25.0"
     },
     "suggest": {
         "spryker/glue-application": "If you want to use plugins with glue application."
