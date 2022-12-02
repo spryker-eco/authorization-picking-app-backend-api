@@ -7,9 +7,9 @@
 
 namespace SprykerEco\Zed\AuthorizationPickingAppBackendApi\Persistence;
 
-use Orm\Zed\Oauth\Persistence\SpyOauthAuthCodeQuery;
 use Orm\Zed\Oauth\Persistence\SpyOauthClientQuery;
 use Orm\Zed\Oauth\Persistence\SpyOauthScopeQuery;
+use Orm\Zed\OauthCodeFlow\Persistence\SpyOauthAuthCodeQuery;
 use Spryker\Zed\Kernel\Persistence\AbstractPersistenceFactory;
 use SprykerEco\Zed\AuthorizationPickingAppBackendApi\AuthorizationPickingAppBackendApiDependencyProvider;
 use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Persistence\Propel\Mapper\AuthCodeMapper;
@@ -22,7 +22,7 @@ use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Persistence\Propel\Mapper\A
 class AuthorizationPickingAppBackendApiPersistenceFactory extends AbstractPersistenceFactory
 {
     /**
-     * @return \Orm\Zed\Oauth\Persistence\SpyOauthAuthCodeQuery
+     * @return \Orm\Zed\OauthCodeFlow\Persistence\SpyOauthAuthCodeQuery
      */
     public function getOauthAuthCodePropelQuery(): SpyOauthAuthCodeQuery
     {

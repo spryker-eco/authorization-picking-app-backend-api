@@ -7,9 +7,9 @@
 
 namespace SprykerEco\Zed\AuthorizationPickingAppBackendApi;
 
-use Orm\Zed\Oauth\Persistence\SpyOauthAuthCodeQuery;
 use Orm\Zed\Oauth\Persistence\SpyOauthClientQuery;
 use Orm\Zed\Oauth\Persistence\SpyOauthScopeQuery;
+use Orm\Zed\OauthCodeFlow\Persistence\SpyOauthAuthCodeQuery;
 use Spryker\Zed\Kernel\AbstractBundleDependencyProvider;
 use Spryker\Zed\Kernel\Container;
 use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Dependency\External\AuthorizationPickingAppBackendApiToYamlAdapter;
