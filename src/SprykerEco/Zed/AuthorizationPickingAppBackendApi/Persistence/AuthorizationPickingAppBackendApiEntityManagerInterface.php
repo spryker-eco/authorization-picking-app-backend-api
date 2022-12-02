@@ -7,14 +7,14 @@
 
 namespace SprykerEco\Zed\AuthorizationPickingAppBackendApi\Persistence;
 
-use Generated\Shared\Transfer\SpyOauthAuthCodeEntityTransfer;
+use Generated\Shared\Transfer\SpyOauthCodeFlowAuthCodeEntityTransfer;
 
 interface AuthorizationPickingAppBackendApiEntityManagerInterface
 {
     /**
-     * @param \Generated\Shared\Transfer\SpyOauthAuthCodeEntityTransfer $oauthAuthCodeEntityTransfer
+     * @param \Generated\Shared\Transfer\SpyOauthCodeFlowAuthCodeEntityTransfer $oauthCodeFlowAuthCodeEntityTransfer
      *
-     * @return \Generated\Shared\Transfer\SpyOauthAuthCodeEntityTransfer
+     * @return \Generated\Shared\Transfer\SpyOauthCodeFlowAuthCodeEntityTransfer
      */
-    public function saveCode(SpyOauthAuthCodeEntityTransfer $oauthAuthCodeEntityTransfer): SpyOauthAuthCodeEntityTransfer;
+    public function saveCode(SpyOauthCodeFlowAuthCodeEntityTransfer $oauthCodeFlowAuthCodeEntityTransfer): SpyOauthCodeFlowAuthCodeEntityTransfer;
 }

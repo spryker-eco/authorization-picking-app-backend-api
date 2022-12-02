@@ -8,7 +8,7 @@
 namespace SprykerEco\Zed\AuthorizationPickingAppBackendApi\Business\Repositories;
 
 use Generated\Shared\Transfer\AuthCodeTransfer;
-use Generated\Shared\Transfer\SpyOauthAuthCodeEntityTransfer;
+use Generated\Shared\Transfer\SpyOauthCodeFlowAuthCodeEntityTransfer;
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use LogicException;
@@ -69,7 +69,7 @@ class AuthCodeRepository implements AuthCodeRepositoryInterface
         /** @var string $encodedScopes */
         $encodedScopes = json_encode($authCodeEntity->getScopes());
 
-        $authCodeEntityTransfer = new SpyOauthAuthCodeEntityTransfer();
+        $authCodeEntityTransfer = new SpyOauthCodeFlowAuthCodeEntityTransfer();
         $authCodeEntityTransfer
             ->setIdentifier($authCodeEntity->getIdentifier())
             ->setUserIdentifier($userIdentifier)

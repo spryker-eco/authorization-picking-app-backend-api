@@ -9,7 +9,7 @@ namespace SprykerEco\Zed\AuthorizationPickingAppBackendApi;
 
 use Orm\Zed\Oauth\Persistence\SpyOauthClientQuery;
 use Orm\Zed\Oauth\Persistence\SpyOauthScopeQuery;
-use Orm\Zed\OauthCodeFlow\Persistence\SpyOauthAuthCodeQuery;
+use Orm\Zed\OauthCodeFlow\Persistence\SpyOauthCodeFlowAuthCodeQuery;
 use Spryker\Zed\Kernel\AbstractBundleDependencyProvider;
 use Spryker\Zed\Kernel\Container;
 use SprykerEco\Zed\AuthorizationPickingAppBackendApi\Dependency\External\AuthorizationPickingAppBackendApiToYamlAdapter;
@@ -133,7 +133,7 @@ class AuthorizationPickingAppBackendApiDependencyProvider extends AbstractBundle
     protected function addOauthAuthCodePropelQuery(Container $container): Container
     {
         $container->set(static::PROPEL_QUERY_OAUTH_AUTH_CODE, $container->factory(function () {
-            return SpyOauthAuthCodeQuery::create();
+            return SpyOauthCodeFlowAuthCodeQuery::create();
         }));
 
         return $container;

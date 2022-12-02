@@ -8,18 +8,18 @@
 namespace SprykerEco\Zed\AuthorizationPickingAppBackendApi\Persistence\Propel\Mapper;
 
 use Generated\Shared\Transfer\AuthCodeTransfer;
-use Orm\Zed\Oauth\Persistence\SpyOauthAuthCode;
+use Orm\Zed\OauthCodeFlow\Persistence\SpyOauthCodeFlowAuthCode;
 
 class AuthCodeMapper
 {
     /**
-     * @param \Orm\Zed\Oauth\Persistence\SpyOauthAuthCode $authCodeEntity
+     * @param \Orm\Zed\OauthCodeFlow\Persistence\SpyOauthCodeFlowAuthCode $authCodeEntity
      * @param \Generated\Shared\Transfer\AuthCodeTransfer $authCodeTransfer
      *
      * @return \Generated\Shared\Transfer\AuthCodeTransfer
      */
     public function mapAuthCodeEntityToAuthCodeTransfer(
-        SpyOauthAuthCode $authCodeEntity,
+        SpyOauthCodeFlowAuthCode $authCodeEntity,
         AuthCodeTransfer $authCodeTransfer
     ): AuthCodeTransfer {
         $authCodeTransfer->fromArray($authCodeEntity->toArray(), true);
