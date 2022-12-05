@@ -39,7 +39,7 @@ class AuthorizationPickingAppBackendApiDependencyProvider extends AbstractBundle
     /**
      * @var string
      */
-    public const PROPEL_QUERY_OAUTH_AUTH_CODE = 'PROPEL_QUERY_OAUTH_AUTH_CODE';
+    public const PROPEL_QUERY_OAUTH_CODE_FLOW_AUTH_CODE = 'PROPEL_QUERY_OAUTH_CODE_FLOW_AUTH_CODE';
 
     /**
      * @var string
@@ -74,7 +74,7 @@ class AuthorizationPickingAppBackendApiDependencyProvider extends AbstractBundle
     public function providePersistenceLayerDependencies(Container $container): Container
     {
         $container = parent::providePersistenceLayerDependencies($container);
-        $container = $this->addOauthAuthCodePropelQuery($container);
+        $container = $this->addOauthCodeFlowAuthCodePropelQuery($container);
         $container = $this->addOauthClientPropelQuery($container);
         $container = $this->addOauthScopePropelQuery($container);
 
@@ -130,9 +130,9 @@ class AuthorizationPickingAppBackendApiDependencyProvider extends AbstractBundle
      *
      * @return \Spryker\Zed\Kernel\Container
      */
-    protected function addOauthAuthCodePropelQuery(Container $container): Container
+    protected function addOauthCodeFlowAuthCodePropelQuery(Container $container): Container
     {
-        $container->set(static::PROPEL_QUERY_OAUTH_AUTH_CODE, $container->factory(function () {
+        $container->set(static::PROPEL_QUERY_OAUTH_CODE_FLOW_AUTH_CODE, $container->factory(function () {
             return SpyOauthCodeFlowAuthCodeQuery::create();
         }));
 

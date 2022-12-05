@@ -64,7 +64,7 @@ class AuthorizationPickingAppBackendApiRepository extends AbstractRepository imp
         $scopes = sprintf('["%s"]', implode('", "', $scopeIdentifiers));
 
         $authCodeEntity = $this->getFactory()
-            ->getOauthAuthCodePropelQuery() # OauthAuthCodeQuery was injected through DependencyProvider - spy_oauth_auth_code is defined in another module and dependency resolved through DependencyProvider
+            ->getOauthCodeFlowAuthCodePropelQuery() # OauthCodeFlowAuthCodeQuery was injected through DependencyProvider - spy_oauth_code_flow_auth_code is defined in another module and dependency resolved through DependencyProvider
             ->filterByFkOauthClient($client->getIdentifier())
             ->filterByExpirityDate(['min' => new DateTimeImmutable('now')], Criteria::GREATER_EQUAL)
             ->filterByScopes($scopes)

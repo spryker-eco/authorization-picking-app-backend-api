@@ -24,9 +24,9 @@ class AuthorizationPickingAppBackendApiPersistenceFactory extends AbstractPersis
     /**
      * @return \Orm\Zed\OauthCodeFlow\Persistence\SpyOauthCodeFlowAuthCodeQuery
      */
-    public function getOauthAuthCodePropelQuery(): SpyOauthCodeFlowAuthCodeQuery
+    public function getOauthCodeFlowAuthCodePropelQuery(): SpyOauthCodeFlowAuthCodeQuery
     {
-        return $this->getProvidedDependency(AuthorizationPickingAppBackendApiDependencyProvider::PROPEL_QUERY_OAUTH_AUTH_CODE);
+        return $this->getProvidedDependency(AuthorizationPickingAppBackendApiDependencyProvider::PROPEL_QUERY_OAUTH_CODE_FLOW_AUTH_CODE);
     }
 
     /**
