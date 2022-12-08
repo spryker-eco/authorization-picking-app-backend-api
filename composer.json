@@ -64,8 +64,5 @@
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true
         }
-    },
-    "include-path": [
-        "src/"
-    ]
+    }
 }
