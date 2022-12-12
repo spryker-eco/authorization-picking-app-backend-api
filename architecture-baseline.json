@@ -1,0 +1,9 @@
+[
+    {
+        "fileName": "src/SprykerEco/Zed/AuthorizationPickingAppBackendApi/Dependency/Facade/AuthorizationPickingAppBackendApiToUserFacadeBridge.php",
+        "description": "Bridges: Method `findUser()` must have `public function get<DomainEntity>Collection(<DomainEntity>CriteriaTransfer): <DomainEntity>CollectionTransfer` signature.",
+        "rule": "BridgeFacadeMethodsRule",
+        "ruleset": "Spryker",
+        "priority": "2"
+    }
+]
