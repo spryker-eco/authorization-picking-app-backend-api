@@ -83,7 +83,7 @@ jobs:
                   composer install
 
             - name: Run IDE generation
-              run: ls -la vendor/bin
+              run: vendor/bin/console dev:ide-auto-completion:generate
 
             - name: Run codestyle checks
               run: composer cs-check
