@@ -82,14 +82,14 @@ jobs:
                   composer --version
                   composer install
 
-            - name: Run IDE generation
-              run: vendor/bin/console dev:ide-auto-completion:generate
-
             - name: Run codestyle checks
               run: composer cs-check
 
             - name: Run codeception tests
               run: composer test
+
+            - name: Run IDE generation
+              run: vendor/bin/console dev:ide-auto-completion:generate
 
             - name: Run PHPStan
               run: composer stan
