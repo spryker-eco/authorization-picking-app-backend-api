@@ -89,7 +89,7 @@ jobs:
               run: composer test
 
             - name: Run IDE generation
-              run: ls -la vendor/bin
+              run: ls -la 
 
             - name: Run PHPStan
               run: composer stan
