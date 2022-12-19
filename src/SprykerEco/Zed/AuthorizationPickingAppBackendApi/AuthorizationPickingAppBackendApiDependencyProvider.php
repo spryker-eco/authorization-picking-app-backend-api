@@ -121,7 +121,7 @@ class AuthorizationPickingAppBackendApiDependencyProvider extends AbstractBundle
         /** @var \Generated\Zed\Ide\AutoCompletion&\Spryker\Shared\Kernel\LocatorLocatorInterface $locator */
         $locator = $container->getLocator();
 
-        $container->set(static::FACADE_USER, function (Container $container, $locator) {
+        $container->set(static::FACADE_USER, function (Container $container) use ($locator) {
             return new AuthorizationPickingAppBackendApiToUserFacadeBridge($locator->user()->facade());
         });
 
