@@ -62,6 +62,7 @@ if (!is_dir($configTargetDirectory)) {
 
 copy($configSourceDirectory . 'config_default.php', $configTargetDirectory . 'config_default.php');
 copy($configSourceDirectory . 'config_propel.php', $configTargetDirectory . 'config_propel.php');
+copy($configSourceDirectory . 'default_store.php', $configTargetDirectory . 'default_store.php');
 copy($configSourceDirectory . 'stores.php', $configTargetDirectory . 'stores.php');
 
 $config = Config::getInstance();
