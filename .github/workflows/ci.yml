@@ -89,7 +89,7 @@ jobs:
               run: composer test
 
             - name: Run IDE generation
-              run: vendor/bin/console dev:ide-auto-completion:generate
+              run: ls -la vendor/bin
 
             - name: Run PHPStan
               run: composer stan
@@ -127,8 +127,8 @@ jobs:
             - name: Composer prefer lowest
               run: composer lowest-setup
 
-            - name: Run PHPStan (currently not running properly)
-              run: composer stan || true
+            - name: Run PHPStan
+              run: composer stan
 
             - name: Validate prefer lowest
               run: vendor/bin/validate-prefer-lowest -m
