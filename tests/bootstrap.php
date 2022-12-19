@@ -64,5 +64,7 @@ copy($configSourceDirectory . 'config_default.php', $configTargetDirectory . 'co
 copy($configSourceDirectory . 'config_propel.php', $configTargetDirectory . 'config_propel.php');
 copy($configSourceDirectory . 'stores.php', $configTargetDirectory . 'stores.php');
 
+var_dump(APPLICATION_STORE);
+
 $config = Config::getInstance();
 $config->init();
