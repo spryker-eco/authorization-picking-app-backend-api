@@ -21,21 +21,33 @@ jobs:
         env:
             APPLICATION_ENV: devtest
             APPLICATION_STORE: DE
-            PROJECT: adyen
+            PROJECT: "AuthorizationPickingAppBackendApi"
             SPRYKER_DB_VERSION: 10.2
-            SPRYKER_DB_HOST: 127.0.0.1
-            SPRYKER_DB_PORT: 3306
-            SPRYKER_DB_DATABASE: eu-docker
-            SPRYKER_DB_USERNAME: root
-            SPRYKER_DB_PASSWORD: secret
-            SPRYKER_DB_ROOT_PASSWORD: secret
-            SPRYKER_DB_ALLOW_EMPTY_PASSWORD: false
-            SPRYKER_DB_CHARACTER_SET: utf8
-            SPRYKER_DB_COLLATE: utf8_general_ci
+                SPRYKER_DB_HOST: 127.0.0.1
+                SPRYKER_DB_PORT: 3306
+                SPRYKER_DB_DATABASE: eu-docker
+                SPRYKER_DB_USERNAME: root
+                SPRYKER_DB_PASSWORD: secret
+                SPRYKER_DB_ROOT_PASSWORD: secret
+                SPRYKER_DB_ALLOW_EMPTY_PASSWORD: false
+                SPRYKER_DB_CHARACTER_SET: utf8
+                SPRYKER_DB_COLLATE: utf8_general_ci
 
         steps:
             - uses: actions/checkout@v2
 
+            - name: Setup Database
+              uses: getong/mariadb-action@v1.1
+              with:
+                  host port: ${{ env.SPRYKER_DB_PORT }}
+                  container port: ${{ env.SPRYKER_DB_PORT }}
+                  character set server: ${{ env.SPRYKER_DB_CHARACTER_SET }}
+                  collation server: ${{ env.SPRYKER_DB_COLLATE }}
+                  mariadb version: ${{ env.SPRYKER_DB_VERSION }}
+                  mysql database: ${{ env.SPRYKER_DB_DATABASE }}
+                  mysql root password: ${{ env.SPRYKER_DB_ROOT_PASSWORD }}
+                  mysql user: ${{ env.SPRYKER_DB_USERNAME }}
+                  mysql password: ${{ env.SPRYKER_DB_PASSWORD }}
             - name: Setup PHP
               uses: shivammathur/setup-php@v2
               with:
@@ -71,11 +83,11 @@ jobs:
             - name: Run tests
               run: composer test
 
+            - name: Run IDE generation
+              run: ls -la ../../../
+
             - name: Run PHPStan
               run: composer stan
-
-            - name: Run IDE generation
-              run: vendor/bin/console dev:ide-auto-completion:generate
 
             - name: Run CodeStyle checks
               run: composer cs-check
