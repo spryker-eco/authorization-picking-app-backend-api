@@ -90,8 +90,10 @@ jobs:
                   composer test
                   vendor/bin/console dev:ide-auto-completion:generate
 
-#            - name: Run IDE generation
-#              run: APPLICATION_STORE=${{ env.APPLICATION_STORE }} vendor/bin/console dev:ide-auto-completion:generate && cd tests/app/src/Generated && ls -la
+            - name: Run IDE generation
+              run: vendor/bin/console dev:ide-auto-completion:generate && cd tests/app/src/Generated && ls -la
+              env:
+                  APPLICATION_STORE: DE
 
             - name: Run PHPStan
               run: composer stan
