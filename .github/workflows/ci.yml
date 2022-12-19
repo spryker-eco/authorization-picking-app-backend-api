@@ -85,7 +85,7 @@ jobs:
               run: composer test
 
             - name: Run PHPStan
-              run: composer stan
+              run: composer phpstan
 
     lowest:
         name: AuthorizationPickingAppBackendApi Prefer Lowest (PHP ${{ matrix.php }})
