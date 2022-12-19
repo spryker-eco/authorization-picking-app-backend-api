@@ -86,9 +86,7 @@ jobs:
               run: composer cs-check
 
             - name: Run codeception tests
-              run: |
-                  composer test
-                  vendor/bin/console dev:ide-auto-completion:generate
+              run: composer test
 
             - name: Run IDE generation
               run: vendor/bin/console dev:ide-auto-completion:generate && cd tests/app/src/Generated && ls -la
