@@ -1,5 +1,20 @@
 name: CI
 
+env:
+    APPLICATION_ENV: 'development'
+    APPLICATION_STORE: 'DE'
+    PROJECT: 'AuthorizationPickingAppBackendApi'
+    SPRYKER_DB_VERSION: 10.2
+    SPRYKER_DB_HOST: 127.0.0.1
+    SPRYKER_DB_PORT: 3306
+    SPRYKER_DB_DATABASE: eu-docker
+    SPRYKER_DB_USERNAME: root
+    SPRYKER_DB_PASSWORD: secret
+    SPRYKER_DB_ROOT_PASSWORD: secret
+    SPRYKER_DB_ALLOW_EMPTY_PASSWORD: false
+    SPRYKER_DB_CHARACTER_SET: utf8
+    SPRYKER_DB_COLLATE: utf8_general_ci
+
 on:
     pull_request:
     push:
@@ -8,33 +23,16 @@ on:
     workflow_dispatch:
 
 jobs:
-    validation:
-        name: "Validation"
+    ci:
+        name: "AuthorizationPickingAppBackendApi"
         runs-on: ubuntu-18.04
         strategy:
             fail-fast: false
             matrix:
-                include:
-                    - php: '8.0'
-                    - php: '8.2'
-
-        env:
-            APPLICATION_ENV: devtest
-            APPLICATION_STORE: DE
-            PROJECT: "AuthorizationPickingAppBackendApi"
-            SPRYKER_DB_VERSION: 10.2
-            SPRYKER_DB_HOST: 127.0.0.1
-            SPRYKER_DB_PORT: 3306
-            SPRYKER_DB_DATABASE: eu-docker
-            SPRYKER_DB_USERNAME: root
-            SPRYKER_DB_PASSWORD: secret
-            SPRYKER_DB_ROOT_PASSWORD: secret
-            SPRYKER_DB_ALLOW_EMPTY_PASSWORD: false
-            SPRYKER_DB_CHARACTER_SET: utf8
-            SPRYKER_DB_COLLATE: utf8_general_ci
+                php: ['8.0', '8.2']
 
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v3
 
             - name: Setup Database
               uses: getong/mariadb-action@v1.1
@@ -48,11 +46,12 @@ jobs:
                   mysql root password: ${{ env.SPRYKER_DB_ROOT_PASSWORD }}
                   mysql user: ${{ env.SPRYKER_DB_USERNAME }}
                   mysql password: ${{ env.SPRYKER_DB_PASSWORD }}
+
             - name: Setup PHP
               uses: shivammathur/setup-php@v2
               with:
                   php-version: ${{ matrix.php }}
-                  extensions: mbstring, intl
+                  extensions: mbstring, intl, bcmath
                   tools: composer:v2
 
             - name: Configure sysctl limits
@@ -61,10 +60,12 @@ jobs:
                   sudo sysctl -w vm.swappiness=1
                   sudo sysctl -w fs.file-max=262144
                   sudo sysctl -w vm.max_map_count=262144
+
             - name: Composer get cache directory
               id: composer-cache
               run: |
                   echo "::set-output name=dir::$(composer config cache-files-dir)"
+
             - name: Composer cache
               uses: actions/cache@v2
               with:
@@ -72,6 +73,7 @@ jobs:
                   key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
                   restore-keys: |
                       ${{ runner.os }}-composer-
+
             - name: Composer validate
               run: composer validate
 
@@ -80,39 +82,36 @@ jobs:
                   composer --version
                   composer install
 
-            - name: Run tests
+            - name: Run codestyle checks
+              run: composer cs-check
+
+            - name: Run codeception tests
               run: composer test
 
             - name: Run IDE generation
-              run: vendor/bin/console dev:ide-auto-completion:generate
+              run: APPLICATION_STORE=DE vendor/bin/console dev:ide-auto-completion:generate
 
             - name: Run PHPStan
               run: composer stan
 
-            - name: Run CodeStyle checks
-              run: composer cs-check
-
-    prefer-lowest:
-        runs-on: ubuntu-20.04
-        strategy:
-            fail-fast: false
-            matrix:
-                php-version: [
-                        '8.0'
-                ]
+    lowest:
+        name: Prefer Lowest
+        runs-on: ubuntu-18.04
 
         steps:
-            - uses: actions/checkout@v2
+            - name: Checkout@v2
+              uses: actions/checkout@v3
 
             - name: Validate composer.json and composer.lock
               run: composer validate
 
-            - name: Get Composer Cache Directory
+            - name: Composer get cache directory
               id: composer-cache
               run: |
                   echo "::set-output name=dir::$(composer config cache-files-dir)"
 
-            - uses: actions/cache@v2
+            - name: Composer cache
+              uses: actions/cache@v2
               with:
                   path: ${{ steps.composer-cache.outputs.dir }}
                   key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -122,14 +121,11 @@ jobs:
             - name: Setup PHP
               uses: shivammathur/setup-php@v2
               with:
-                  php-version: ${{ matrix.php-version }}
-                  extensions: mbstring, intl, pdo_mysql
+                  php-version: '8.0'
+                  extensions: mbstring, intl, bcmath
 
             - name: Composer prefer lowest
               run: composer lowest-setup
-
-            - name: Run tests
-              run: composer test
 
             - name: Run PHPStan (currently not running properly)
               run: composer stan || true
