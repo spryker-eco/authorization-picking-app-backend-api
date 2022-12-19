@@ -22,6 +22,16 @@ jobs:
             APPLICATION_ENV: devtest
             APPLICATION_STORE: DE
             PROJECT: adyen
+            SPRYKER_DB_VERSION: 10.2
+            SPRYKER_DB_HOST: 127.0.0.1
+            SPRYKER_DB_PORT: 3306
+            SPRYKER_DB_DATABASE: eu-docker
+            SPRYKER_DB_USERNAME: root
+            SPRYKER_DB_PASSWORD: secret
+            SPRYKER_DB_ROOT_PASSWORD: secret
+            SPRYKER_DB_ALLOW_EMPTY_PASSWORD: false
+            SPRYKER_DB_CHARACTER_SET: utf8
+            SPRYKER_DB_COLLATE: utf8_general_ci
 
         steps:
             - uses: actions/checkout@v2
