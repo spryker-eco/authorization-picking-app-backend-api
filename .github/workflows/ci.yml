@@ -29,7 +29,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php: ['8.0', '8.1']
+                php: ['8.0', '8.2']
 
         steps:
             - uses: actions/checkout@v2
@@ -81,8 +81,37 @@ jobs:
             - name: Run codestyle checks
               run: composer cs-check
 
-            - name: Run codeception tests (failing because of missing `spryker/oauth` dependency)
-              run: composer test || true
+            - name: Run codeception tests
+              run: composer test
 
-            - name: Run PHPStan (failing because of missing `spryker/oauth` dependency)
-              run: composer stan || true
+            - name: Run PHPStan
+              run: composer stan
+
+    lowest:
+        name: AuthorizationPickingAppBackendApi Prefer Lowest (PHP ${{ matrix.php }})
+        runs-on: ubuntu-18.04
+
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v2
+
+            -   name: Setup PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: '8.0'
+                    extensions: mbstring, intl, bcmath, pdo_mysql
+
+            -   name: Composer Install
+                run: composer install --prefer-dist --no-interaction --profile
+
+            -   name: Composer Update
+                run: composer update --prefer-lowest --prefer-dist --no-interaction --profile -vvv
+
+            -   name: Prefer lowest installation
+                run: composer require --dev dereuromark/composer-prefer-lowest;
+
+            -   name: PHP syntax validation
+                run: find ./src -path src -prune -o -type f -name '*.php' -print0 | xargs -0 -n1 -P4 php -l -n | (! grep -v "No syntax errors detected" )
+
+            -   name: Prefer lowest validation
+                run: vendor/bin/validate-prefer-lowest -m
