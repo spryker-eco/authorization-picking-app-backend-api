@@ -51,7 +51,7 @@
     "scripts": {
         "cs-check": "phpcs --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml -p -s src/ tests/",
         "cs-fix": "phpcbf --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml -p src/ tests/",
-        "stan": "vendor/bin/console dev:ide-auto-completion:generate && phpstan analyse -c phpstan.neon -l 7 src/",
+        "stan": "phpstan analyse -c phpstan.neon -l 7 src/",
         "test": "codecept run",
         "test-coverage": "codecept run --coverage-xml",
         "lowest": "validate-prefer-lowest -m",
