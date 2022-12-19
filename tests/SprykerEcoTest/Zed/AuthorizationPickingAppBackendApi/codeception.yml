@@ -19,6 +19,7 @@ suites:
         modules:
             enabled:
                 - Asserts
+                - \SprykerTest\Zed\Testify\Helper\Business\DependencyProviderHelper
                 - \SprykerTest\Shared\Testify\Helper\Environment:
                     isolated: true
                 - \SprykerTest\Zed\Testify\Helper\Business\BusinessHelper
@@ -35,7 +36,7 @@ suites:
                     entitySchemaDirectories:
                          - vendor/*/*/src/*/Zed/*/Persistence/Propel/Schema/
                 - \SprykerTest\Shared\Testify\Helper\LocatorHelper:
-                    projectNamespaces:
+                      coreNamespaces:
                         - 'Spryker'
                         - 'SprykerTest'
                         - 'SprykerEco'

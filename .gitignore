@@ -32,3 +32,5 @@ tests/**/_generated/
 
 vendor/
 composer.lock
+
+/tests/app/
