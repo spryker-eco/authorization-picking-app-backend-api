@@ -82,6 +82,9 @@ jobs:
                   composer --version
                   composer install
 
+            - name: Run IDE generation
+              run: vendor/bin/console dev:ide-auto-completion:generate
+
             - name: Run codestyle checks
               run: composer cs-check
 

@@ -35,7 +35,6 @@ spl_autoload_register(function ($className) {
         strrpos($className, 'Transfer') === false
         && strrpos($className, 'Builder') === false
         && strrpos($className, 'Spy') === false
-        && strrpos($className, 'AutoCompletion') === false
     ) {
         return false;
     }
