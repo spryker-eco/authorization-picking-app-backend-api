@@ -89,7 +89,7 @@ jobs:
               run: composer test
 
             - name: Run IDE generation
-              run: APPLICATION_STORE=DE vendor/bin/console dev:ide-auto-completion:generate
+              run: cd app && ls -la
 
             - name: Run PHPStan
               run: composer stan
