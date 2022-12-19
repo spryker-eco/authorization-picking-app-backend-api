@@ -24,6 +24,7 @@
         "spryker/application": "*",
         "spryker/code-sniffer": "*",
         "spryker/config": "*",
+        "spryker/console": "*",
         "spryker/error-handler": "*",
         "spryker/glue-application": "*",
         "spryker/log": "*",
