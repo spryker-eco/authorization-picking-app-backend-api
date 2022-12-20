@@ -121,7 +121,7 @@ jobs:
               run: composer lowest-setup
 
             - name: Run PHPStan
-              run: cd app/src && ls -la && composer stan
+              run: ls -la && composer stan
 
             - name: Validate prefer lowest
               run: vendor/bin/validate-prefer-lowest -m
