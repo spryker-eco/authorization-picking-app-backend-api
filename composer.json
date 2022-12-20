@@ -28,7 +28,7 @@
         "spryker/glue-application": "*",
         "spryker/log": "*",
         "spryker/monolog": "*",
-        "spryker/propel": "^3.34.0",
+        "spryker/propel": "^3.35.0",
         "spryker/queue": "*",
         "spryker/testify": "^3.47.0"
     },
