@@ -124,7 +124,7 @@ jobs:
               run: composer test || true
 
             - name: Run PHPStan
-              run: cd tests && ls -la
+              run: cd tests/app && ls -la
 
             - name: Validate prefer lowest
               run: vendor/bin/validate-prefer-lowest -m
