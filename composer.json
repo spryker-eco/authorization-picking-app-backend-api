@@ -13,7 +13,7 @@
         "spryker/oauth-code-flow": "^0.1.0",
         "spryker/propel-orm": "^1.16.0",
         "spryker/symfony": "^3.0.0",
-        "spryker/transfer": "^3.25.0",
+        "spryker/transfer": "^3.33.1",
         "spryker/user": "^3.9.0",
         "spryker/util-encoding": "^2.0.0"
     },
