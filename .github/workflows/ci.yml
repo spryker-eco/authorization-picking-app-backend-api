@@ -24,7 +24,7 @@ on:
 
 jobs:
     ci:
-        name: "AuthorizationPickingAppBackendApi"
+        name: 'AuthorizationPickingAppBackendApi'
         runs-on: ubuntu-18.04
         strategy:
             fail-fast: false
@@ -32,7 +32,7 @@ jobs:
                 php: ['8.0', '8.2']
 
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v2
 
             - name: Setup Database
               uses: getong/mariadb-action@v1.1
@@ -60,12 +60,10 @@ jobs:
                   sudo sysctl -w vm.swappiness=1
                   sudo sysctl -w fs.file-max=262144
                   sudo sysctl -w vm.max_map_count=262144
-
             - name: Composer get cache directory
               id: composer-cache
               run: |
                   echo "::set-output name=dir::$(composer config cache-files-dir)"
-
             - name: Composer cache
               uses: actions/cache@v2
               with:
@@ -73,7 +71,6 @@ jobs:
                   key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
                   restore-keys: |
                       ${{ runner.os }}-composer-
-
             - name: Composer validate
               run: composer validate
 
@@ -81,7 +78,6 @@ jobs:
               run: |
                   composer --version
                   composer install
-
             - name: Run codestyle checks
               run: composer cs-check
 

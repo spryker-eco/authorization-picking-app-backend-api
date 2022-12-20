@@ -19,7 +19,6 @@ suites:
         modules:
             enabled:
                 - Asserts
-                - \SprykerTest\Zed\Testify\Helper\Business\DependencyProviderHelper
                 - \SprykerTest\Shared\Testify\Helper\Environment:
                     isolated: true
                 - \SprykerTest\Zed\Testify\Helper\Business\BusinessHelper
