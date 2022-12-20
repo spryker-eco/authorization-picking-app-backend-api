@@ -111,6 +111,26 @@ jobs:
                   restore-keys: |
                       ${{ runner.os }}-composer-
 
+            - name: Setup Database
+              uses: getong/mariadb-action@v1.1
+              with:
+                  host port: ${{ env.SPRYKER_DB_PORT }}
+                  container port: ${{ env.SPRYKER_DB_PORT }}
+                  character set server: ${{ env.SPRYKER_DB_CHARACTER_SET }}
+                  collation server: ${{ env.SPRYKER_DB_COLLATE }}
+                  mariadb version: ${{ env.SPRYKER_DB_VERSION }}
+                  mysql database: ${{ env.SPRYKER_DB_DATABASE }}
+                  mysql root password: ${{ env.SPRYKER_DB_ROOT_PASSWORD }}
+                  mysql user: ${{ env.SPRYKER_DB_USERNAME }}
+                  mysql password: ${{ env.SPRYKER_DB_PASSWORD }}
+
+            - name: Configure sysctl limits
+              run: |
+                  sudo swapoff -a
+                  sudo sysctl -w vm.swappiness=1
+                  sudo sysctl -w fs.file-max=262144
+                  sudo sysctl -w vm.max_map_count=262144
+
             - name: Setup PHP
               uses: shivammathur/setup-php@v2
               with:
