@@ -19,8 +19,7 @@
     },
     "require-dev": {
         "codeception/module-asserts": "^3.0.0",
-        "nette/utils": "^3.2.5",
-        "phpstan/phpstan": "*",
+        "phpstan/phpstan": "1.8.10",
         "phpunit/phpunit": "^9.0.0",
         "spryker/application": "*",
         "spryker/code-sniffer": "*",
