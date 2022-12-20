@@ -120,6 +120,9 @@ jobs:
             - name: Composer prefer lowest
               run: composer lowest-setup
 
+            - name: Run codeception tests
+              run: composer test || true
+
             - name: Run PHPStan
               run: composer stan
 
