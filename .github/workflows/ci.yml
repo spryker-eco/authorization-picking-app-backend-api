@@ -120,7 +120,7 @@ jobs:
             - name: Composer prefer lowest
               run: composer lowest-setup
 
-            - name: Run PHPStan 
+            - name: Run PHPStan
               run: composer stan
 
             - name: Validate prefer lowest
