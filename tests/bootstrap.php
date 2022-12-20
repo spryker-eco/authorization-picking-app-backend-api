@@ -57,7 +57,7 @@ $configSourceDirectory = APPLICATION_ROOT_DIR . '..' . DIRECTORY_SEPARATOR . 'co
 $configTargetDirectory = APPLICATION_ROOT_DIR . 'config' . DIRECTORY_SEPARATOR . 'Shared' . DIRECTORY_SEPARATOR;
 
 if (!is_dir($configTargetDirectory)) {
-    mkdir($configTargetDirectory, 0777, true);
+    mkdir($configTargetDirectory, 0755, true);
 }
 
 copy($configSourceDirectory . 'config_default.php', $configTargetDirectory . 'config_default.php');
