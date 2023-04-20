@@ -61,9 +61,7 @@ class UserProvider implements UserProviderInterface
             return $oauthUserTransfer->setIsSuccess(false);
         }
 
-        $userIdentifierTransfer = (new UserIdentifierTransfer())
-            ->setUserReference($userTransfer->getUserReference())
-            ->setIdUser($userTransfer->getIdUser());
+        $userIdentifierTransfer = (new UserIdentifierTransfer())->fromArray($userTransfer->toArray(), true);
 
         return $oauthUserTransfer
             ->setUserIdentifier($this->utilEncodingService->encodeJson($userIdentifierTransfer->toArray()))
