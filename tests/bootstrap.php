@@ -2,33 +2,32 @@
 
 use Spryker\Shared\Config\Config;
 
-if (!defined('MODULE_ROOT_DIR')) {
-    define('MODULE_ROOT_DIR', realpath(__DIR__ . DIRECTORY_SEPARATOR . '..') . DIRECTORY_SEPARATOR);
+if (!defined('APPLICATION')) {
+    define('APPLICATION', 'AuthorizationPickingAppBackendApi');
 }
+
 if (!defined('APPLICATION_ROOT_DIR')) {
     define('APPLICATION_ROOT_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR);
 }
+
 if (!defined('APPLICATION_VENDOR_DIR')) {
-    define('APPLICATION_VENDOR_DIR', realpath(__DIR__ . DIRECTORY_SEPARATOR . '..') . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR);
+    define('APPLICATION_VENDOR_DIR', APPLICATION_ROOT_DIR . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR);
 }
+
 if (!defined('APPLICATION_STORE')) {
     define('APPLICATION_STORE', 'DE');
 }
+
 if (!defined('APPLICATION_ENV')) {
-    define('APPLICATION_ENV', 'dev');
+    define('APPLICATION_ENV', 'development');
 }
+
 if (!defined('APPLICATION_SOURCE_DIR')) {
     define('APPLICATION_SOURCE_DIR', APPLICATION_ROOT_DIR . 'src' . DIRECTORY_SEPARATOR);
 }
 
-// Copy config files
-$configSharedTargetDirectory = APPLICATION_ROOT_DIR . 'config' . DIRECTORY_SEPARATOR . 'Shared' . DIRECTORY_SEPARATOR;
-if (!is_dir($configSharedTargetDirectory)) {
-    mkdir($configSharedTargetDirectory, 0777, true);
-}
-$configZedTargetDirectory = APPLICATION_ROOT_DIR . 'config' . DIRECTORY_SEPARATOR . 'Zed' . DIRECTORY_SEPARATOR;
-if (!is_dir($configZedTargetDirectory)) {
-    mkdir($configZedTargetDirectory, 0777, true);
+if (!defined('MODULE_UNDER_TEST_ROOT_DIR')) {
+    define('MODULE_UNDER_TEST_ROOT_DIR', '');
 }
 
 spl_autoload_register(function ($className) {
@@ -54,9 +53,16 @@ spl_autoload_register(function ($className) {
     return true;
 });
 
-$configSourceDirectory = MODULE_ROOT_DIR . 'ci' . DIRECTORY_SEPARATOR;
-copy($configSourceDirectory . 'config_default.php', $configSharedTargetDirectory . 'config_default.php');
-copy($configSourceDirectory . 'config_propel.php', $configSharedTargetDirectory . 'config_propel.php');
+$configSourceDirectory = APPLICATION_ROOT_DIR . '..' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'Shared' . DIRECTORY_SEPARATOR;
+$configTargetDirectory = APPLICATION_ROOT_DIR . 'config' . DIRECTORY_SEPARATOR . 'Shared' . DIRECTORY_SEPARATOR;
+
+if (!is_dir($configTargetDirectory)) {
+    mkdir($configTargetDirectory, 0755, true);
+}
+
+copy($configSourceDirectory . 'config_default.php', $configTargetDirectory . 'config_default.php');
+copy($configSourceDirectory . 'config_propel.php', $configTargetDirectory . 'config_propel.php');
+copy($configSourceDirectory . 'stores.php', $configTargetDirectory . 'stores.php');
 
 $config = Config::getInstance();
 $config->init();

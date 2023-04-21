@@ -35,7 +35,7 @@ suites:
                     entitySchemaDirectories:
                          - vendor/*/*/src/*/Zed/*/Persistence/Propel/Schema/
                 - \SprykerTest\Shared\Testify\Helper\LocatorHelper:
-                    projectNamespaces:
+                      coreNamespaces:
                         - 'Spryker'
                         - 'SprykerTest'
                         - 'SprykerEco'
