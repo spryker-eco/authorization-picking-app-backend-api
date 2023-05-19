@@ -33,8 +33,7 @@ class AuthorizeResourceController extends AbstractBackendApiController
     public function postAction(
         AuthCodeAttributesTransfer $authCodeAttributesTransfer,
         GlueRequestTransfer $glueRequestTransfer
-    ): GlueResponseTransfer
-    {
+    ): GlueResponseTransfer {
         $oauthRequestTransfer = (new OauthRequestTransfer())
             ->fromArray($authCodeAttributesTransfer->toArray(), true);
 
