@@ -39,7 +39,12 @@ class AuthorizeResourceController extends AbstractBackendApiController
 
         $oauthResponseTransfer = $this->getFactory()->getAuthorizationPickingAppBackendApiFacade()->authorize($oauthRequestTransfer);
 
-        return $this->mapAuthenticationAttributesToGlueResponseTransfer($oauthResponseTransfer);
+        $glueResponseTransfer = $this->mapAuthenticationAttributesToGlueResponseTransfer($oauthResponseTransfer);
+        if (!$glueResponseTransfer->getHttpStatus()) {
+            $glueResponseTransfer->setHttpStatus(Response::HTTP_OK);
+        }
+
+        return $glueResponseTransfer;
     }
 
     /**
